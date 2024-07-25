@@ -1,0 +1,13 @@
+[worldserver]
+
+########################################
+# PlayerbotsEvents configuration
+########################################
+#
+#    PlayerbotsEvents.Enable
+#        Description: Enable idle shutdown
+#        Default:     0 - Disabled
+#                     1 - Enabled
+#
+
+PlayerbotsEvents.Enable = 1
