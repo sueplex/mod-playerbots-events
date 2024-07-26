@@ -4,7 +4,7 @@
 #include "AccountMgr.h"
 #include "DatabaseEnv.h"
 #include "Player.h"
-#include "RandomPlayerbotFactory.h"
+#include "PlayerbotFactory.h"
 
 #include <vector>
 #include <stdint.h>
@@ -78,7 +78,7 @@ bool PvpBotMgr::Initialize()
         }
         bot_creation = true;
         LOG_INFO("pvpbots", "Creating random bot characters for account: [{}/{}]", accountNumber + 1, 80);
-        RandomPlayerbotFactory factory(accountId, 80, ITEM_QUALITY_EPIC);
+        PlayerbotFactory factory(accountId, 80, ITEM_QUALITY_EPIC);
 
         WorldSession* session = new WorldSession(accountId, "", nullptr, SEC_PLAYER, EXPANSION_WRATH_OF_THE_LICH_KING, time_t(0), LOCALE_enUS, 0, false, false, 0, true);
         sessionBots.push_back(session);
