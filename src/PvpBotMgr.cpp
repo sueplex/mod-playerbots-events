@@ -120,7 +120,7 @@ bool PvpBotMgr::Initialize()
     for (uint32 accountId : pvpBotAccounts) {
         totalPvpBotChars += AccountMgr::GetCharactersCount(accountId);
     }
-    LOG_INFO("server.loading", "{} random bot accounts with {} characters available", 80, totalRandomBotChars);
+    LOG_INFO("server.loading", "{} random bot accounts with {} characters available", 80, totalPvpBotChars);
     return true
 };
 
