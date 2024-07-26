@@ -10,6 +10,7 @@
 #include <stdint.h>
 
 bool PvpBotMgr::Initialize()
+{
     uint32 totalAccCount = 80;
 
     LOG_INFO("pvpbots", "Creating random bot accounts...");
@@ -119,8 +120,5 @@ bool PvpBotMgr::Initialize()
     for (uint32 accountId : pvpBotAccounts) {
         totalPvpBotChars += AccountMgr::GetCharactersCount(accountId);
     }
-
- {
-
 };
 
