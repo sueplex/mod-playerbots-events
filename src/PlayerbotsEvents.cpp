@@ -19,6 +19,7 @@
 #include "Config.h"
 #include "Map.h"
 #include "ScriptMgr.h"
+#include "PvpBotMgr.h"
 #include "Player.h"
 
 
@@ -35,13 +36,14 @@ bool PlayerbotsEvents::Initialize()
     {
         return false;
     }
+    sPvpMgr->Initialize();
     return true;
 }
 
 
 void PlayerbotsEvents::OnUpdateZone(Player* player, uint32 newZone, uint32 /*newArea*/)
 {
-    if (!enabled || player->GetSession()->GetRemoteAddress() == "bot")
+    if (!enabled || player->GetSession()->GetRemoteAddress() == "bot" /*|| newZone == player->m_zoneUpdateId*/)
         return;
 
     AreaTableEntry const *area = sAreaTableStore.LookupEntry(newZone);

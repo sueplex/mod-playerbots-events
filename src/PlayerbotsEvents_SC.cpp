@@ -27,14 +27,9 @@ class PlayerbotsEventsPlayer : public PlayerScript
 public:
     PlayerbotsEventsPlayer() : PlayerScript("PlayerbotsEventsPlayer") { }
 
-    void OnLogin(Player* player) override
+    void OnUpdateZone(Player* player, uint32 newZone, uint32 newArea) override
     {
-        sIS->OnLogin(player);
-    }
-
-    void OnLogout(Player* player) override
-    {
-        sIS->OnLogout(player);
+        sPlayerbotsEvents->OnUpdateZone(player, newZone, newArea);
     }
 };
 
@@ -46,7 +41,7 @@ public:
 
     void OnBeforeWorldInitialized() override
     {
-        sIS->Initialize();
+        sPlayerbotsEvents->Initialize();
     }
 };
 
