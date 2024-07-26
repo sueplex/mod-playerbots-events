@@ -4,7 +4,7 @@
 #include "AccountMgr.h"
 #include "DatabaseEnv.h"
 #include "Player.h"
-#include "RandomPlayerBotFactory.h"
+#include "RandomPlayerbotFactory.h"
 
 #include <vector>
 #include <stdint.h>
