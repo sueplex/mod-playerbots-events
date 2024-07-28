@@ -10,7 +10,7 @@ class CachedPvpEvent
 {
     public:
         CachedPvpEvent() : value(0), lastChangeTime(0), validIn(0), data("") { }
-        CachedPvpEvent(const CachedEvent& other) : value(other.value), lastChangeTime(other.lastChangeTime), validIn(other.validIn), data(other.data) { }
+        CachedPvpEvent(const CachedPvpEvent& other) : value(other.value), lastChangeTime(other.lastChangeTime), validIn(other.validIn), data(other.data) { }
         CachedPvpEvent(uint32 value, uint32 lastChangeTime, uint32 validIn, std::string const data = "") : value(value), lastChangeTime(lastChangeTime), validIn(validIn), data(data) { }
 
         bool IsEmpty() { return !lastChangeTime; }
