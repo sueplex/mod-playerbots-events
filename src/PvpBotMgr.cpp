@@ -2,6 +2,7 @@
 
 #include "PvpBotMgr.h"
 #include "AccountMgr.h"
+#include "Common.h"
 #include "DatabaseEnv.h"
 #include "Player.h"
 #include "RandomPlayerbotFactory.h"
@@ -124,3 +125,155 @@ bool PvpBotMgr::Initialize()
     return true;
 };
 
+uint32 PvpBotMgr::AddPVPBots()
+{
+    uint32 maxAllowedBots = 40;
+    if (currentBots.size() < maxAllowedBots)
+    {
+        for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
+        {
+            uint32 accountId = *i;
+
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARS_BY_ACCOUNT_ID);
+            stmt->SetData(0, accountId);
+            PreparedQueryResult result = CharacterDatabase.Query(stmt);
+            if (!result)
+                continue;
+            std::vector<uint32> guids;
+            do
+            {
+                Field* fields = result->Fetch();
+                ObjectGuid::LowType guid = fields[0].Get<uint32>();
+                if (GetEventValue(guid, "add"))
+                    continue;
+
+                if (GetEventValue(guid, "logout"))
+                    continue;
+
+                if (GetPlayerBot(guid))
+                    continue;
+
+                if (std::find(currentBots.begin(), currentBots.end(), guid) != currentBots.end())
+                    continue;
+
+                // Disable DKS? true for now i guess IDK
+                if (true) {
+                    QueryResult result = CharacterDatabase.Query("Select class from characters where guid = {}", guid);
+                    if (!result) {
+                        continue;
+                    }
+                    Field* fields = result->Fetch();
+                    uint32 rClass = fields[0].Get<uint32>();
+                    if (rClass == CLASS_DEATH_KNIGHT) {
+                        continue;
+                    }
+                }
+                guids.push_back(guid);
+            } while (result->NextRow());
+
+            std::mt19937 rnd(time(0));
+            std::shuffle(guids.begin(), guids.end(), rnd);
+
+            for (uint32 &guid : guids) {
+                uint32 add_time = 1 * HOUR;
+
+                SetEventValue(guid, "add", 1, add_time);
+                SetEventValue(guid, "logout", 0, 0);
+                currentBots.push_back(guid);
+
+                maxAllowedBotCount--;
+                if (!maxAllowedBotCount)
+                    break;
+            }
+
+            if (!maxAllowedBotCount)
+                break;
+        }
+    }
+}
+
+uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
+{
+    // load all events at once on first event load
+    if (eventCache[bot].empty())
+    {
+        PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_RANDOM_BOTS_BY_OWNER_AND_BOT);
+        stmt->SetData(0, 0);
+        stmt->SetData(1, bot);
+        if (PreparedQueryResult result = PlayerbotsDatabase.Query(stmt))
+        {
+            do
+            {
+                Field* fields = result->Fetch();
+                std::string const eventName = fields[0].Get<std::string>();
+
+                CachedPvpEvent e;
+                e.value = fields[1].Get<uint32>();
+                e.lastChangeTime = fields[2].Get<uint32>();
+                e.validIn = fields[3].Get<uint32>();
+                e.data = fields[4].Get<std::string>();
+                eventCache[bot][eventName] = std::move(e);
+            }
+            while (result->NextRow());
+        }
+    }
+
+    CachedPvpEvent& e = eventCache[bot][event];
+    /*if (e.IsEmpty())
+    {
+        QueryResult results = PlayerbotsDatabase.Query("SELECT `value`, `time`, validIn, `data` FROM playerbots_random_bots WHERE owner = 0 AND bot = {} AND event = {}",
+                bot, event.c_str());
+
+        if (results)
+        {
+            Field* fields = results->Fetch();
+            e.value = fields[0].Get<uint32>();
+            e.lastChangeTime = fields[1].Get<uint32>();
+            e.validIn = fields[2].Get<uint32>();
+            e.data = fields[3].Get<std::string>();
+        }
+    }
+    */
+
+    if ((time(0) - e.lastChangeTime) >= e.validIn && event != "specNo" && event != "specLink")
+        e.value = 0;
+
+    return e.value;
+}
+
+uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 value, uint32 validIn, std::string const data)
+{
+    PlayerbotsDatabaseTransaction trans = PlayerbotsDatabase.BeginTransaction();
+
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_DEL_RANDOM_BOTS_BY_OWNER_AND_EVENT);
+    stmt->SetData(0, 0);
+    stmt->SetData(1, bot);
+    stmt->SetData(2, event.c_str());
+    trans->Append(stmt);
+
+    if (value)
+    {
+        stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_INS_RANDOM_BOTS);
+        stmt->SetData(0, 0);
+        stmt->SetData(1, bot);
+        stmt->SetData(2, static_cast<uint32>(GameTime::GetGameTime().count()));
+        stmt->SetData(3, validIn);
+        stmt->SetData(4, event.c_str());
+        stmt->SetData(5, value);
+        if (data != "")
+        {
+            stmt->SetData(6, data.c_str());
+        }
+        else
+        {
+            stmt->SetData(6);
+        }
+        trans->Append(stmt);
+    }
+
+    PlayerbotsDatabase.CommitTransaction(trans);
+
+    CachedPvpEvent e(value, (uint32)time(nullptr), validIn, data);
+    eventCache[bot][event] = std::move(e);
+    return value;
+}
