@@ -9,6 +9,7 @@
 #include "Playerbots.h"
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
+#include "WorldSession.h"
 
 #include <vector>
 #include <stdint.h>
