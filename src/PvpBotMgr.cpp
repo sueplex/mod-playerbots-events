@@ -172,8 +172,8 @@ uint32 PvpBotMgr::AddPVPBots()
                 guids.push_back(guid);
             } while (result->NextRow());
 
-            //std::mt19937 rnd(time(0));
-            std::shuffle(guids.begin(), guids.end(), rnd);
+            /*std::mt19937 rnd(time(0));
+            std::shuffle(guids.begin(), guids.end(), rnd);*/
 
             for (uint32 &guid : guids) {
                 uint32 add_time = 1 * HOUR;
