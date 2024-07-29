@@ -360,7 +360,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             //botAI->GetAiObjectContext()->GetValue<bool>("random bot update")->Set(true);
             // TODO IsPvpBot method
             /*if (!sRandomPlayerbotMgr->IsRandomBot(player))*/
-            if (std::find(currentBots.begin(), currenBots.end(), bot) != currentBots.end())
+            if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
                 update = false;
 
             if (player->GetGroup() && botAI->GetGroupMaster())
