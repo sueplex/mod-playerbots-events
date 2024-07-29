@@ -9,7 +9,6 @@
 #include "Playerbots.h"
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
-#include "WorldSession.h"
 
 #include <vector>
 #include <stdint.h>
@@ -434,11 +433,13 @@ bool PvpBotMgr::ProcessBot(Player* player)
         return false;
     }
 
-    Group* group = player->GetGroup();
+    // TODO Cleanup group?
+    /*Group* group = player->GetGroup();
     if (group && !group->isLFGGroup() && IsRandomBot(group->GetLeader())) {
         player->RemoveFromGroup();
         LOG_INFO("playerbots", "Bot {} remove from group since leader is random bot.", player->GetName().c_str());
-    }
+    }*/
+
     //GET_PLAYERBOT_AI(player)->GetAiObjectContext()->GetValue<bool>("random bot update")->Set(false);
 
     // bool randomiser = true;
@@ -725,11 +726,10 @@ void RandomPlayerbotMgr::Refresh(Player* bot)
     if (bot->GetMaxPower(POWER_ENERGY) > 0)
         bot->SetPower(POWER_ENERGY, bot->GetMaxPower(POWER_ENERGY));
 
-    uint32 money = bot->GetMoney();
-    bot->SetMoney(money + 500 * sqrt(urand(1, bot->GetLevel() * 5)));
-
+    // TODO cleanup and logout
     if (bot->GetGroup())
         bot->RemoveFromGroup();
+
 
     if (pmo)
         pmo->finish();
