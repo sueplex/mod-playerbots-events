@@ -4,6 +4,7 @@
 #include "AccountMgr.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
+#inlcude "GameTime.h"
 #include "Player.h"
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
