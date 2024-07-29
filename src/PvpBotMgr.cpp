@@ -673,3 +673,64 @@ uint32 RandomPlayerbotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, 
 
     return level;
 }
+
+void RandomPlayerbotMgr::Revive(Player* player)
+{
+    uint32 bot = player->GetGUID().GetCounter();
+
+    // LOG_INFO("playerbots", "Bot {} revived", player->GetName().c_str());
+    SetEventValue(bot, "dead", 0, 0);
+    SetEventValue(bot, "revive", 0, 0);
+
+
+    Refresh(player);
+    RandomTeleportGrindForLevel(player);
+}
+
+void RandomPlayerbotMgr::Refresh(Player* bot)
+{
+    PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+    if (!botAI)
+        return;
+
+    if (bot->isDead())
+    {
+        bot->ResurrectPlayer(1.0f);
+        bot->SpawnCorpseBones();
+        botAI->ResetStrategies(false);
+    }
+
+    // if (sPlayerbotAIConfig->disableRandomLevels)
+    //     return;
+
+    if (bot->InBattleground())
+        return;
+
+    LOG_DEBUG("playerbots", "Refreshing bot {} <{}>", bot->GetGUID().ToString().c_str(), bot->GetName().c_str());
+
+    PerformanceMonitorOperation* pmo = sPerformanceMonitor->start(PERF_MON_RNDBOT, "Refresh");
+
+    botAI->Reset();
+
+    bot->DurabilityRepairAll(false, 1.0f, false);
+	bot->SetFullHealth();
+	bot->SetPvP(true);
+
+    PlayerbotFactory factory(bot, bot->GetLevel(), ITEM_QUALITY_RARE);
+    factory.Refresh();
+
+    if (bot->GetMaxPower(POWER_MANA) > 0)
+        bot->SetPower(POWER_MANA, bot->GetMaxPower(POWER_MANA));
+
+    if (bot->GetMaxPower(POWER_ENERGY) > 0)
+        bot->SetPower(POWER_ENERGY, bot->GetMaxPower(POWER_ENERGY));
+
+    uint32 money = bot->GetMoney();
+    bot->SetMoney(money + 500 * sqrt(urand(1, bot->GetLevel() * 5)));
+
+    if (bot->GetGroup())
+        bot->RemoveFromGroup();
+
+    if (pmo)
+        pmo->finish();
+}

@@ -56,6 +56,15 @@ class PvpBotMgr : public PlayerbotHolder
         void ScheduleTeleport(uint32 bot, uint32 time = 0);
         void ScheduleChangeStrategy(uint32 bot, uint32 time = 0);
 
+        void Randomize(Player* bot);
+        void Clear(Player* bot);
+        void RandomizeFirst(Player* bot);
+        void RandomizeMin(Player* bot);
+
+
+        void Revive(Player* player);
+        void Refresh(Player* bot);
+
         PlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;
         std::list<uint32> currentBots;
