@@ -38,12 +38,18 @@ class PvpBotMgr : public PlayerbotHolder
             return &instance;
         }
 
+        PlayerBotMap playerBots;
+
         bool Initialize();
         uint32 AddPVPBots();
 
         uint32 GetEventValue(uint32 bot, std::string const event);
         uint32 SetEventValue(uint32 bot, std::string const event, uint32 value, uint32 validIn, std::string const data = "");
 
+    protected:
+        virtual void OnBotLoginInternal(Player* const bot) = 0;
+
+        PlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;
         std::list<uint32> currentBots;
         std::map<uint32, std::map<std::string, CachedPvpEvent>> eventCache;
