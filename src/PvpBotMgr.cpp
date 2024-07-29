@@ -182,12 +182,12 @@ uint32 PvpBotMgr::AddPVPBots()
                 SetEventValue(guid, "logout", 0, 0);
                 currentBots.push_back(guid);
 
-                maxAllowedBotCount--;
-                if (!maxAllowedBotCount)
+                maxAllowedBots--;
+                if (!maxAllowedBots)
                     break;
             }
 
-            if (!maxAllowedBotCount)
+            if (!maxAllowedBots)
                 break;
         }
     }
