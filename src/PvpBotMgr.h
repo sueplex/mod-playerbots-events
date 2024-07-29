@@ -3,6 +3,8 @@
 #define _PVPBOTS_MGR_H
 
 #include "Common.h"
+#include "QueryHolder.h"
+#include "QueryResult.h"
 
 #include <vector>
 
