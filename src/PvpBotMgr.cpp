@@ -12,7 +12,7 @@
 #include <vector>
 #include <stdint.h>
 
-bool PvpBotMgr::Initialize()
+bool PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal = false)
 {
     uint32 totalAccCount = 80;
 
