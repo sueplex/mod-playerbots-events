@@ -40,7 +40,7 @@ class PvpBotMgr : public PlayerbotHolder
 
         PlayerBotMap playerBots;
 
-        bool Initialize();
+        bool Initialize() override;
         uint32 AddPVPBots();
 
         uint32 GetEventValue(uint32 bot, std::string const event);
