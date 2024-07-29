@@ -707,7 +707,7 @@ void RandomPlayerbotMgr::Refresh(Player* bot)
 
     LOG_DEBUG("playerbots", "Refreshing bot {} <{}>", bot->GetGUID().ToString().c_str(), bot->GetName().c_str());
 
-    PerformanceMonitorOperation* pmo = sPerformanceMonitor->start(PERF_MON_RNDBOT, "Refresh");
+    /*PerformanceMonitorOperation* pmo = sPerformanceMonitor->start(PERF_MON_RNDBOT, "Refresh");*/
 
     botAI->Reset();
 
@@ -729,6 +729,6 @@ void RandomPlayerbotMgr::Refresh(Player* bot)
         bot->RemoveFromGroup();
 
 
-    if (pmo)
-        pmo->finish();
+    /*if (pmo)
+        pmo->finish();*/
 }
