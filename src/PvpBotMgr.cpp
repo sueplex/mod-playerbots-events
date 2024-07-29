@@ -12,6 +12,14 @@
 #include <vector>
 #include <stdint.h>
 
+PvpBotMgr::PvpBotMgr() : PlayerbotHolder() {
+
+}
+
+PvpBotMgr::~PvpBotMgr() {
+
+}
+
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 {
     uint32 totalAccCount = 80;
