@@ -682,8 +682,11 @@ void PvpBotMgr::Revive(Player* player)
     SetEventValue(bot, "revive", 0, 0);
 
 
+    // TODO handle the revive here? what should they do
+    /*
     Refresh(player);
     RandomTeleportGrindForLevel(player);
+    */
 }
 
 void PvpBotMgr::Refresh(Player* bot)
