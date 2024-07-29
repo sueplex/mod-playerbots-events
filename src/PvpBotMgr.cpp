@@ -599,9 +599,6 @@ void RandomPlayerbotMgr::RandomizeFirst(Player* bot)
 
     if (bot->GetGroup())
         bot->RemoveFromGroup();
-
-	if (pmo)
-        pmo->finish();
 }
 
 void PvpBotMgr::RandomizeMin(Player* bot)
@@ -640,8 +637,8 @@ void PvpBotMgr::RandomizeMin(Player* bot)
     if (bot->GetGroup())
         bot->RemoveFromGroup();
 
-	if (pmo)
-        pmo->finish();
+	/*if (pmo)
+        pmo->finish();*/
 }
 
 void RandomPlayerbotMgr::Clear(Player* bot)
