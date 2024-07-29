@@ -31,7 +31,7 @@ class PvpBotMgr : public PlayerbotHolder
 {
     public:
         PvpBotMgr();
-        virtual ~PvpBotMgr();
+        virtual ~PvpBotMgr() {};
         static PvpBotMgr* instance()
         {
             static PvpBotMgr instance;
