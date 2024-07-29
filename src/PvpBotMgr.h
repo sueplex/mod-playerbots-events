@@ -46,6 +46,12 @@ class PvpBotMgr : public PlayerbotHolder
         uint32 GetEventValue(uint32 bot, std::string const event);
         uint32 SetEventValue(uint32 bot, std::string const event, uint32 value, uint32 validIn, std::string const data = "");
 
+        uint32 GetValue(Player* bot, std::string const type);
+        uint32 GetValue(uint32 bot, std::string const type);
+
+        void SetValue(uint32 bot, std::string const type, uint32 value, std::string const data = "");
+        void SetValue(Player* bot, std::string const type, uint32 value, std::string const data = "");
+
     protected:
         void OnBotLoginInternal(Player* const bot) override;
 

@@ -360,7 +360,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         {
             //botAI->GetAiObjectContext()->GetValue<bool>("random bot update")->Set(true);
             // TODO IsPvpBot method
-            /*if (!sRandomPlayerbotMgr->IsRandomBot(player))*/
+            /*if (!sPvpBotMgr->IsRandomBot(player))*/
             if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
                 update = false;
 
@@ -548,7 +548,7 @@ void PvpBotMgr::Randomize(Player* bot)
     //RandomTeleportForLevel(bot);
 }
 
-void RandomPlayerbotMgr::RandomizeFirst(Player* bot)
+void PvpBotMgr::RandomizeFirst(Player* bot)
 {
 	uint32 maxLevel = sPlayerbotAIConfig->randomBotMaxLevel;
 	if (maxLevel > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
@@ -641,13 +641,13 @@ void PvpBotMgr::RandomizeMin(Player* bot)
         pmo->finish();*/
 }
 
-void RandomPlayerbotMgr::Clear(Player* bot)
+void PvpBotMgr::Clear(Player* bot)
 {
     PlayerbotFactory factory(bot, bot->GetLevel());
     factory.ClearEverything();
 }
 
-uint32 RandomPlayerbotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float teleZ)
+uint32 PvpBotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float teleZ)
 {
 	uint32 maxLevel = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
 
@@ -673,7 +673,7 @@ uint32 RandomPlayerbotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, 
     return level;
 }
 
-void RandomPlayerbotMgr::Revive(Player* player)
+void PvpBotMgr::Revive(Player* player)
 {
     uint32 bot = player->GetGUID().GetCounter();
 
@@ -686,7 +686,7 @@ void RandomPlayerbotMgr::Revive(Player* player)
     RandomTeleportGrindForLevel(player);
 }
 
-void RandomPlayerbotMgr::Refresh(Player* bot)
+void PvpBotMgr::Refresh(Player* bot)
 {
     PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
     if (!botAI)
@@ -731,4 +731,24 @@ void RandomPlayerbotMgr::Refresh(Player* bot)
 
     /*if (pmo)
         pmo->finish();*/
+}
+
+uint32 PvpBotMgr::GetValue(uint32 bot, std::string const type)
+{
+    return GetEventValue(bot, type);
+}
+
+uint32 PvpBotMgr::GetValue(Player* bot, std::string const type)
+{
+    return GetValue(bot->GetGUID().GetCounter(), type);
+}
+
+void PvpBotMgr::SetValue(uint32 bot, std::string const type, uint32 value, std::string const data)
+{
+    SetEventValue(bot, type, value, sPlayerbotAIConfig->maxRandomBotInWorldTime, data);
+}
+
+void PvpBotMgr::SetValue(Player* bot, std::string const type, uint32 value, std::string const data)
+{
+    SetValue(bot->GetGUID().GetCounter(), type, value, data);
 }
