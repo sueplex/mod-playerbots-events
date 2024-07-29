@@ -30,6 +30,8 @@ class CachedPvpEvent
 class PvpBotMgr : public PlayerbotHolder
 {
     public:
+        PvpBotMgr();
+        virtual ~PvpBotMgr();
         static PvpBotMgr* instance()
         {
             static PvpBotMgr instance;
