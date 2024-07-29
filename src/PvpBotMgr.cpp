@@ -124,7 +124,6 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
         totalPvpBotChars += AccountMgr::GetCharactersCount(accountId);
     }
     LOG_INFO("server.loading", "{} random bot accounts with {} characters available", totalAccCount, totalPvpBotChars);
-    return true;
 };
 
 uint32 PvpBotMgr::AddPVPBots()
