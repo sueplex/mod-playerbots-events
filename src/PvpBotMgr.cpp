@@ -278,3 +278,8 @@ uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 valu
     eventCache[bot][event] = std::move(e);
     return value;
 }
+
+void PvpBotMgr::OnBotLoginInternal(Player * const bot)
+{
+    LOG_INFO("playerbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
+}
