@@ -499,7 +499,176 @@ bool PvpBotMgr::ProcessBot(Player* player)
 }
 
 
+void PvpBotMgr::ScheduleRandomize(uint32 bot, uint32 time)
+{
+    SetEventValue(bot, "randomize", 1, time);
+}
+void PvpBotMgr::ScheduleTeleport(uint32 bot, uint32 time)
+{
+    if (!time)
+        time = 60 + urand(sPlayerbotAIConfig->randomBotUpdateInterval, sPlayerbotAIConfig->randomBotUpdateInterval * 3);
+
+    SetEventValue(bot, "teleport", 1, time);
+
+}
+void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
+    if (!time)
+        time = urand(sPlayerbotAIConfig->minRandomBotChangeStrategyTime, sPlayerbotAIConfig->maxRandomBotChangeStrategyTime);
+
+    SetEventValue(bot, "change_strategy", 1, time);
+}
+
+
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
     LOG_INFO("playerbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
+}
+
+void PvpBotMgr::Randomize(Player* bot)
+{
+    if (bot->InBattleground())
+        return;
+
+    if (bot->GetLevel() < 3 || (bot->GetLevel() < 56 && bot->getClass() == CLASS_DEATH_KNIGHT)) {
+        RandomizeFirst(bot);
+    }
+    else if (bot->GetLevel() < sPlayerbotAIConfig->randomBotMaxLevel || !sPlayerbotAIConfig->downgradeMaxLevelBot) {
+        uint8 level = bot->GetLevel();
+        PlayerbotFactory factory(bot, level);
+        factory.Randomize(true);
+        // IncreaseLevel(bot);
+    }
+    else {
+        RandomizeFirst(bot);
+    }
+    // TODO teleport to PVP event
+    //RandomTeleportForLevel(bot);
+}
+
+void RandomPlayerbotMgr::RandomizeFirst(Player* bot)
+{
+	uint32 maxLevel = sPlayerbotAIConfig->randomBotMaxLevel;
+	if (maxLevel > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+		maxLevel = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
+
+    // if lvl sync is enabled, max level is limited by online players lvl
+    /*if (sPlayerbotAIConfig->syncLevelWithPlayers)
+        maxLevel = std::max(sPlayerbotAIConfig->randomBotMinLevel, std::min(playersLevel, sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL)));*/
+
+	//PerformanceMonitorOperation* pmo = sPerformanceMonitor->start(PERF_MON_RNDBOT, "RandomizeFirst");
+
+    // TODO configure PVP char level
+    uint32 level = maxLevel;
+
+
+    // Random Levels enabled?
+    /*if (false) {
+        level = bot->getClass() == CLASS_DEATH_KNIGHT ?
+            std::max(sPlayerbotAIConfig->randombotStartingLevel, sWorld->getIntConfig(CONFIG_START_HEROIC_PLAYER_LEVEL)) :
+            sPlayerbotAIConfig->randombotStartingLevel;
+    }*/
+
+    SetValue(bot, "level", level);
+
+    PlayerbotFactory factory(bot, level);
+    factory.Randomize(false);
+
+    // TODO minRandomBotRandomizeTime
+    uint32 randomTime = urand(3 * HOUR, 8 * HOUR);
+    // TODO inWorldTime
+    uint32 inworldTime = urand(2 * DAY, 1 * WEEK);
+
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt->SetData(0, randomTime);
+    stmt->SetData(1, "bot_delete");
+    stmt->SetData(2, bot->GetGUID().GetCounter());
+    PlayerbotsDatabase.Execute(stmt);
+
+    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt->SetData(0, inworldTime);
+    stmt->SetData(1, "logout");
+    stmt->SetData(2, bot->GetGUID().GetCounter());
+    PlayerbotsDatabase.Execute(stmt);
+
+    // teleport to a random inn for bot level
+    if (GET_PLAYERBOT_AI(bot))
+        GET_PLAYERBOT_AI(bot)->Reset(true);
+
+    if (bot->GetGroup())
+        bot->RemoveFromGroup();
+
+	if (pmo)
+        pmo->finish();
+}
+
+void PvpBotMgr::RandomizeMin(Player* bot)
+{
+	//PerformanceMonitorOperation* pmo = sPerformanceMonitor->start(PERF_MON_RNDBOT, "RandomizeMin");
+
+    // TODO wut?
+    uint32 level = 37; //sPlayerbotAIConfig->randomBotMinLevel;
+
+    SetValue(bot, "level", level);
+
+    PlayerbotFactory factory(bot, level);
+    factory.Randomize(false);
+
+    // TODO minRandomBotRandomizeTime
+    uint32 randomTime = urand(3 * HOUR, 8 * HOUR);
+    // TODO inWorldTime
+    uint32 inworldTime = urand(2 * DAY, 1 * WEEK);
+
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt->SetData(0, randomTime);
+    stmt->SetData(1, "bot_delete");
+    stmt->SetData(2, bot->GetGUID().GetCounter());
+    PlayerbotsDatabase.Execute(stmt);
+
+    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt->SetData(0, inworldTime);
+    stmt->SetData(1, "logout");
+    stmt->SetData(2, bot->GetGUID().GetCounter());
+    PlayerbotsDatabase.Execute(stmt);
+
+    // teleport to a random inn for bot level
+    if (GET_PLAYERBOT_AI(bot))
+        GET_PLAYERBOT_AI(bot)->Reset(true);
+
+    if (bot->GetGroup())
+        bot->RemoveFromGroup();
+
+	if (pmo)
+        pmo->finish();
+}
+
+void RandomPlayerbotMgr::Clear(Player* bot)
+{
+    PlayerbotFactory factory(bot, bot->GetLevel());
+    factory.ClearEverything();
+}
+
+uint32 RandomPlayerbotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float teleZ)
+{
+	uint32 maxLevel = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
+
+    uint32 level = 0;
+    QueryResult results = WorldDatabase.Query("SELECT AVG(t.minlevel) minlevel, AVG(t.maxlevel) maxlevel FROM creature c "
+            "INNER JOIN creature_template t ON c.id1 = t.entry WHERE map = {} AND minlevel > 1 AND ABS(position_x - {}) < {} AND ABS(position_y - {}) < {}",
+            mapId, teleX, sPlayerbotAIConfig->randomBotTeleportDistance / 2, teleY, sPlayerbotAIConfig->randomBotTeleportDistance / 2);
+
+    if (results)
+    {
+        Field* fields = results->Fetch();
+        uint8 minLevel = fields[0].Get<uint8>();
+        uint8 maxLevel = fields[1].Get<uint8>();
+        level = urand(minLevel, maxLevel);
+        if (level > maxLevel)
+            level = maxLevel;
+    }
+    else
+    {
+        level = urand(1, maxLevel);
+    }
+
+    return level;
 }

@@ -52,6 +52,10 @@ class PvpBotMgr : public PlayerbotHolder
         bool ProcessBot(uint32 bot);
         bool ProcessBot(Player* player);
 
+        void ScheduleRandomize(uint32 bot, uint32 time);
+        void ScheduleTeleport(uint32 bot, uint32 time = 0);
+        void ScheduleChangeStrategy(uint32 bot, uint32 time = 0);
+
         PlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;
         std::list<uint32> currentBots;
