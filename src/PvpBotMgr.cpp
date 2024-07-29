@@ -18,7 +18,7 @@ bool PvpBotMgr::Initialize()
 
     std::vector<std::future<void>> account_creations;
     bool account_creation = false;
-    for (uint32 accountNumber = 0; accountNumber < 80; ++accountNumber)
+    for (uint32 accountNumber = 0; accountNumber < totalAccCount; ++accountNumber)
     {
         std::ostringstream out;
         out << "PVPBot" << accountNumber;
@@ -44,18 +44,18 @@ bool PvpBotMgr::Initialize()
 
     if (account_creation) {
         /* wait for async accounts create to make character create correctly, same as account delete */
-        std::this_thread::sleep_for(10ms * 80);
+        std::this_thread::sleep_for(10ms * totalAccCount);
     }
 
     LOG_INFO("pvpbots", "Creating random bot characters...");
     uint32 totalPvpBotChars = 0;
-    uint32 totalCharCount = 80 * 10;
+    uint32 totalCharCount = totalAccCount * 10;
 
     std::unordered_map<uint8,std::vector<std::string>> names;
     //std::vector<std::pair<Player*, uint32>> playerBots;
     std::vector<WorldSession*> sessionBots;
     bool bot_creation = false;
-    for (uint32 accountNumber = 0; accountNumber < 80; ++accountNumber)
+    for (uint32 accountNumber = 0; accountNumber < totalAccCount; ++accountNumber)
     {
         std::ostringstream out;
         out << "PVPBot" << accountNumber;
@@ -78,7 +78,7 @@ bool PvpBotMgr::Initialize()
             continue;
         }
         bot_creation = true;
-        LOG_INFO("pvpbots", "Creating random bot characters for account: [{}/{}]", accountNumber + 1, 80);
+        LOG_INFO("pvpbots", "Creating random bot characters for account: [{}/{}]", accountNumber + 1, totalAccCount);
         RandomPlayerbotFactory factory(accountId);//, 80, ITEM_QUALITY_EPIC);
 
         WorldSession* session = new WorldSession(accountId, "", nullptr, SEC_PLAYER, EXPANSION_WRATH_OF_THE_LICH_KING, time_t(0), LOCALE_enUS, 0, false, false, 0, true);
@@ -121,7 +121,7 @@ bool PvpBotMgr::Initialize()
     for (uint32 accountId : pvpBotAccounts) {
         totalPvpBotChars += AccountMgr::GetCharactersCount(accountId);
     }
-    LOG_INFO("server.loading", "{} random bot accounts with {} characters available", 80, totalPvpBotChars);
+    LOG_INFO("server.loading", "{} random bot accounts with {} characters available", totalAccCount, totalPvpBotChars);
     return true;
 };
 
