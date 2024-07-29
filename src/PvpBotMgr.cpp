@@ -6,6 +6,7 @@
 #include "DatabaseEnv.h"
 #include "GameTime.h"
 #include "Player.h"
+#include "Playerbots.h"
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
 
