@@ -7,6 +7,7 @@
 #include "GameTime.h"
 #include "Player.h"
 #include "Playerbots.h"
+#include "PlayerbotFactory.h"
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
 
