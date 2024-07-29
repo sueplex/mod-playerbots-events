@@ -3,12 +3,13 @@
 #define _PVPBOTS_MGR_H
 
 #include "Common.h"
-#include "QueryHolder.h"
+#include "PlayerbotMgr.h"
+/*#include "QueryHolder.h"
 #include "QueryResult.h"
 
 #include <list>
 #include <map>
-#include <vector>
+#include <vector>*/
 
 class CachedPvpEvent
 {
@@ -26,7 +27,7 @@ class CachedPvpEvent
         std::string data;
 };
 
-class PvpBotMgr
+class PvpBotMgr : public PlayerbotHolder
 {
     public:
         static PvpBotMgr* instance()
