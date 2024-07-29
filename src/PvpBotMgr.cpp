@@ -5,6 +5,7 @@
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "Player.h"
+#include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
 
 #include <vector>
