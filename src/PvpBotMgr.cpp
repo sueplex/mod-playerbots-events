@@ -647,7 +647,7 @@ void PvpBotMgr::Clear(Player* bot)
     factory.ClearEverything();
 }
 
-uint32 PvpBotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float teleZ)
+/*uint32 PvpBotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float teleZ)
 {
 	uint32 maxLevel = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
 
@@ -671,7 +671,7 @@ uint32 PvpBotMgr::GetZoneLevel(uint16 mapId, float teleX, float teleY, float tel
     }
 
     return level;
-}
+}*/
 
 void PvpBotMgr::Revive(Player* player)
 {
