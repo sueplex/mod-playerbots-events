@@ -7,6 +7,7 @@
 #include "QueryResult.h"
 
 #include <list>
+#include <map>
 #include <vector>
 
 class CachedPvpEvent
