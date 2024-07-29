@@ -46,7 +46,7 @@ void PlayerbotsEvents::OnUpdateZone(Player* player, uint32 newZone, uint32 /*new
     if (!enabled || player->GetSession()->GetRemoteAddress() == "bot" /*|| newZone == player->m_zoneUpdateId*/)
         return;
 
-    AreaTableEntry const *area = sAreaTableStore.LookupEntry(newZone);
+    //AreaTableEntry const *area = sAreaTableStore.LookupEntry(newZone);
 
     /*if ((area->flags & 312) == 312) {
         std::cout << area->area_name << " is city\n";

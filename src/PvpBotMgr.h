@@ -38,7 +38,7 @@ class PvpBotMgr : public PlayerbotHolder
             return &instance;
         }
 
-        PlayerBotMap playerBots;
+        //PlayerBotMap playerBots;
 
         void UpdateAIInternal(uint32 elapsed, bool minimal = false) override;
         uint32 AddPVPBots();
@@ -48,6 +48,9 @@ class PvpBotMgr : public PlayerbotHolder
 
     protected:
         void OnBotLoginInternal(Player* const bot) override;
+
+        bool ProcessBot(uint32 bot);
+        bool ProcessBot(Player* player);
 
         PlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;

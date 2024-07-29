@@ -287,7 +287,7 @@ uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 valu
     return value;
 }
 
-bool RandomPlayerbotMgr::ProcessBot(uint32 bot)
+bool PvpBotMgr::ProcessBot(uint32 bot)
 {
     ObjectGuid botGUID = ObjectGuid::Create<HighGuid::Player>(bot);
 
@@ -391,14 +391,14 @@ bool RandomPlayerbotMgr::ProcessBot(uint32 bot)
         LOG_INFO("playerbots", "Bot #{} {}:{} <{}>: log out", bot, IsAlliance(player->getRace()) ? "A" : "H", player->GetLevel(), player->GetName().c_str());
         LogoutPlayerBot(botGUID);
         currentBots.remove(bot);
-        SetEventValue(bot, "logout", 1, urand(sPlayerbotAIConfig->minRandomBotInWorldTime, sPlayerbotAIConfig->maxRandomBotInWorldTime));
+        SetEventValue(bot, "logout", 1, urand(30 * MINUTE, 1 * HOUR));
         return true;
     }
 
     return false;
 }
 
-bool RandomPlayerbotMgr::ProcessBot(Player* player)
+bool PvpBotMgr::ProcessBot(Player* player)
 {
     uint32 bot = player->GetGUID().GetCounter();
 
