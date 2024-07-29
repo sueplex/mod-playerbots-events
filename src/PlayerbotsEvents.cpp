@@ -48,8 +48,8 @@ void PlayerbotsEvents::OnUpdateZone(Player* player, uint32 newZone, uint32 /*new
 
     AreaTableEntry const *area = sAreaTableStore.LookupEntry(newZone);
 
-    if ((area->flags & 312) == 312) {
+    /*if ((area->flags & 312) == 312) {
         std::cout << area->area_name << " is city\n";
     }
-    std::cout << "Add ~level " << player << "to " << area->area_name << "\n";
+    std::cout << "Add ~level " << player << "to " << area->area_name << "\n";*/
 }
