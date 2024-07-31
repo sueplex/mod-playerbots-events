@@ -40,8 +40,6 @@ class PvpBotMgr : public PlayerbotHolder
         void CreatePvpBots();
         void GetBots();
         uint32 AddPVPBots();
-        Player* GetPlayerBot(ObjectGuid guid) const;
-        Player* GetPlayerBot(ObjectGuid::LowType lowGuid) const;
 
         uint32 GetEventValue(uint32 bot, std::string const event);
         uint32 SetEventValue(uint32 bot, std::string const event, uint32 value, uint32 validIn, std::string const data = "");
