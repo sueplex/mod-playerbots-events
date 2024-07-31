@@ -222,7 +222,7 @@ void PvpBotMgr::CreatePvpBots()
 
 uint32 PvpBotMgr::AddPVPBots()
 {
-    uint32 maxAllowedBots = 40;
+    uint32 maxAllowedBots = 2;
     if (currentBots.size() < maxAllowedBots)
     {
         for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
@@ -270,7 +270,7 @@ uint32 PvpBotMgr::AddPVPBots()
             std::shuffle(guids.begin(), guids.end(), rnd);*/
 
             for (uint32 &guid : guids) {
-                uint32 add_time = 1 * HOUR;
+                uint32 add_time = 0;
 
                 SetEventValue(guid, "add", 1, add_time);
                 SetEventValue(guid, "logout", 0, 0);
@@ -278,10 +278,12 @@ uint32 PvpBotMgr::AddPVPBots()
 
                 maxAllowedBots--;
                 if (!maxAllowedBots)
+                    LOG_INFO("server.loading", "Breaking from guids add")
                     break;
             }
 
             if (!maxAllowedBots)
+                LOG_INFO("server.loading", "Breaking from add")
                 break;
         }
     }
