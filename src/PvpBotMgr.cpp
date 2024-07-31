@@ -11,8 +11,11 @@
 #include "PlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
 
-#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <random>
 #include <stdint.h>
+#include <vector>
 
 PvpBotMgr::PvpBotMgr() : PlayerbotHolder() {
 
@@ -23,6 +26,87 @@ PvpBotMgr::~PvpBotMgr() {
 }
 
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
+{
+    std::cout << "updating internal Pvpbotmgr\n";
+    // Get and Set Value for bot_count here?
+    uint32 maxAllowedBotCount = 2;
+
+    GetBots();
+    std::list<uint32> availableBots = currentBots;
+
+    uint32 availableBotCount = availableBots.size();
+    uint32 onlineBotCount = playerBots.size();
+    // SetNextCheckDelay?
+
+    if (availableBotCount < maxAllowedBotCount)
+    {
+        AddPVPBots();
+    }
+
+    uint32 updateBots = 2;
+    uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
+    uint32 loginBots = maxNewBots;
+
+    if (!availableBots.empty())
+    {
+        // Update some of the bots?
+        for (auto bot : availableBots)
+        {
+            if (!GetPlayerBot(bot))
+                continue;
+            if (ProcessBot(bot))
+            {
+                updateBots--;
+            }
+
+            if (!updateBots)
+                break;
+        }
+
+        if (loginBots)
+        {
+            loginBots += updateBots;
+
+            LOG_INFO("playerbots", "{} new bots", loginBots);
+            for (auto bot : availableBots)
+            {
+                if (GetPlayerbot(bot))
+                    continue;
+
+                if (ProcessBot(bot))
+                {
+                    loginBots--;
+                }
+
+                if (!loginBots)
+                    break;
+            }
+        }
+    }
+}
+
+void PvpBotMgr::GetBots()
+{
+    if (!currentBots.empty())
+        return;
+
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_PVP_BOTS_BY_OWNER_AND_EVENT);
+    stmt->SetData(0, 0);
+    stmt->SetData(1, "add");
+    if (PreparedQueryResult result = PlayerbotsDatabase.Query(stmt))
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 bot = fields[0].Get<uint32>();
+            if (GetEventValue(bot, "add"))
+                currentBots.push_back(bot);
+        }
+        while (result->NextRow());
+    }
+}
+
+void CreatePvpBots()
 {
     uint32 totalAccCount = 80;
 
@@ -208,7 +292,7 @@ uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
     // load all events at once on first event load
     if (eventCache[bot].empty())
     {
-        PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_RANDOM_BOTS_BY_OWNER_AND_BOT);
+        PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_PVP_BOTS_BY_OWNER_AND_BOT);
         stmt->SetData(0, 0);
         stmt->SetData(1, bot);
         if (PreparedQueryResult result = PlayerbotsDatabase.Query(stmt))
@@ -256,7 +340,7 @@ uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 valu
 {
     PlayerbotsDatabaseTransaction trans = PlayerbotsDatabase.BeginTransaction();
 
-    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_DEL_RANDOM_BOTS_BY_OWNER_AND_EVENT);
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_DEL_PVP_BOTS_BY_OWNER_AND_EVENT);
     stmt->SetData(0, 0);
     stmt->SetData(1, bot);
     stmt->SetData(2, event.c_str());
@@ -264,7 +348,7 @@ uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 valu
 
     if (value)
     {
-        stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_INS_RANDOM_BOTS);
+        stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_INS_PVP_BOTS);
         stmt->SetData(0, 0);
         stmt->SetData(1, bot);
         stmt->SetData(2, static_cast<uint32>(GameTime::GetGameTime().count()));
@@ -581,13 +665,13 @@ void PvpBotMgr::RandomizeFirst(Player* bot)
     // TODO inWorldTime
     uint32 inworldTime = urand(2 * DAY, 1 * WEEK);
 
-    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_PVP_BOTS);
     stmt->SetData(0, randomTime);
     stmt->SetData(1, "bot_delete");
     stmt->SetData(2, bot->GetGUID().GetCounter());
     PlayerbotsDatabase.Execute(stmt);
 
-    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_PVP_BOTS);
     stmt->SetData(0, inworldTime);
     stmt->SetData(1, "logout");
     stmt->SetData(2, bot->GetGUID().GetCounter());
@@ -618,13 +702,13 @@ void PvpBotMgr::RandomizeMin(Player* bot)
     // TODO inWorldTime
     uint32 inworldTime = urand(2 * DAY, 1 * WEEK);
 
-    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_PVP_BOTS);
     stmt->SetData(0, randomTime);
     stmt->SetData(1, "bot_delete");
     stmt->SetData(2, bot->GetGUID().GetCounter());
     PlayerbotsDatabase.Execute(stmt);
 
-    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_RANDOM_BOTS);
+    stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_UPD_PVP_BOTS);
     stmt->SetData(0, inworldTime);
     stmt->SetData(1, "logout");
     stmt->SetData(2, bot->GetGUID().GetCounter());
