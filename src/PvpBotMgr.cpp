@@ -106,7 +106,7 @@ void PvpBotMgr::GetBots()
     }
 }
 
-void CreatePvpBots()
+void PvpBotMgr::CreatePvpBots()
 {
     uint32 totalAccCount = 80;
 
