@@ -70,7 +70,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
             LOG_INFO("playerbots", "{} new bots", loginBots);
             for (auto bot : availableBots)
             {
-                if (GetPlayerbot(bot))
+                if (GetPlayerBot(bot))
                     continue;
 
                 if (ProcessBot(bot))
