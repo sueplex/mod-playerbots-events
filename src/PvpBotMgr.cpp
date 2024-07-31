@@ -278,12 +278,12 @@ uint32 PvpBotMgr::AddPVPBots()
 
                 maxAllowedBots--;
                 if (!maxAllowedBots)
-                    LOG_INFO("server.loading", "Breaking from guids add")
+                    LOG_INFO("server.loading", "Breaking from guids add");
                     break;
             }
 
             if (!maxAllowedBots)
-                LOG_INFO("server.loading", "Breaking from add")
+                LOG_INFO("server.loading", "Breaking from add");
                 break;
         }
     }
