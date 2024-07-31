@@ -34,8 +34,10 @@ bool PlayerbotsEvents::Initialize()
     enabled = sConfigMgr->GetOption<bool>("PlayerbotsEvents.Enable", true);
     if (!enabled)
     {
+        LOG_INFO("server.loading", "PVPBots disabled");
         return false;
     }
+    LOG_INFO("server.loading", "PVPBots enabled, creating bots");
     sPvpMgr->CreatePvpBots();
     sPvpMgr->UpdateAIInternal(0, false);
     return true;
