@@ -47,6 +47,9 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
     uint32 loginBots = maxNewBots;
 
+    LOG_INFO("server.loading", "have {} bots available", availableBots.size());
+    LOG_INFO("server.loading", "have {} bots currently", currentBots.size())
+
     if (!availableBots.empty())
     {
         // Update some of the bots?
@@ -278,12 +281,10 @@ uint32 PvpBotMgr::AddPVPBots()
 
                 maxAllowedBots--;
                 if (!maxAllowedBots)
-                    LOG_INFO("server.loading", "Breaking from guids add");
                     break;
             }
 
             if (!maxAllowedBots)
-                LOG_INFO("server.loading", "Breaking from add");
                 break;
         }
     }
