@@ -48,7 +48,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 loginBots = maxNewBots;
 
     LOG_INFO("server.loading", "have {} bots available", availableBots.size());
-    LOG_INFO("server.loading", "have {} bots currently", currentBots.size())
+    LOG_INFO("server.loading", "have {} bots currently", currentBots.size());
 
     if (!availableBots.empty())
     {
