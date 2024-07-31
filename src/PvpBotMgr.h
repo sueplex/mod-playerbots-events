@@ -3,13 +3,9 @@
 #define _PVPBOTS_MGR_H
 
 #include "Common.h"
+#include "Player.h"
+#include "PlayerbotAIBase.h"
 #include "PlayerbotMgr.h"
-/*#include "QueryHolder.h"
-#include "QueryResult.h"
-
-#include <list>
-#include <map>
-#include <vector>*/
 
 class CachedPvpEvent
 {
@@ -44,6 +40,8 @@ class PvpBotMgr : public PlayerbotHolder
         void CreatePvpBots();
         void GetBots();
         uint32 AddPVPBots();
+        Player* GetPlayerBot(ObjectGuid guid) const;
+        Player* GetPlayerBot(ObjectGuid::LowType lowGuid) const;
 
         uint32 GetEventValue(uint32 bot, std::string const event);
         uint32 SetEventValue(uint32 bot, std::string const event, uint32 value, uint32 validIn, std::string const data = "");
