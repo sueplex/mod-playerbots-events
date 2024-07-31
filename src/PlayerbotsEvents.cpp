@@ -37,7 +37,7 @@ bool PlayerbotsEvents::Initialize()
         return false;
     }
     sPvpMgr->CreatePvpBots();
-    sPvpMgr->UpdateAIInternal();
+    sPvpMgr->UpdateAIInternal(0, false);
     return true;
 }
 
