@@ -93,6 +93,7 @@ void PvpBotMgr::GetBots()
     if (!currentBots.empty())
         return;
 
+    uint32 maxAllowedBots = 2;
     PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_PVP_BOTS_BY_OWNER_AND_EVENT);
     stmt->SetData(0, 0);
     stmt->SetData(1, "add");
@@ -198,7 +199,7 @@ void PvpBotMgr::CreatePvpBots()
             }
 
             if (cls != 10)
-                if (Player* pvpBot = factory.CreateRandomBot(session, cls, names)) {
+                if (Player* pvpBot = factory.CreateRandomBot(session, cls)) {
                     pvpBot->SaveToDB(true, false);
                     sCharacterCache->AddCharacterCacheEntry(pvpBot->GetGUID(), accountId, pvpBot->GetName(),
                         pvpBot->getGender(), pvpBot->getRace(), pvpBot->getClass(), pvpBot->GetLevel());
