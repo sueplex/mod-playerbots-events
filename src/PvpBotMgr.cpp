@@ -235,27 +235,13 @@ void PvpBotMgr::CreatePvpBots()
 uint32 PvpBotMgr::AddPVPBots()
 {
     uint32 maxAllowedBots = 2;
-    uint32 accountsAllow = 2;
     if (currentBots.size() < maxAllowedBots)
     {
 
         for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
         {
-            std::cout << "accountIDs: " << *i << "\n";
-        }
-        return 2;
-
-        for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
-        {
             uint32 accountId = *i;
             std::cout << "adding for " << accountId << "\n";
-            if (!accountsAllow) {
-                std::cout << "breaking on account allow\n";
-                break;
-            }
-
-            accountsAllow--;
-
 
             CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARS_BY_ACCOUNT_ID);
             stmt->SetData(0, accountId);
@@ -307,16 +293,19 @@ uint32 PvpBotMgr::AddPVPBots()
                 currentBots.push_back(guid);
 
                 maxAllowedBots--;
-                if (!maxAllowedBots)
+                if (!maxAllowedBots) {
                     std::cout << "breaking for account\n";
                     break;
+                }
             }
 
-            if (!maxAllowedBots)
+            if (!maxAllowedBots) {
                 std::cout << "breaking for add bots\n";
                 break;
+            }
         }
     }
+    return currentBots.size();
 }
 
 uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
