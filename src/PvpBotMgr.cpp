@@ -320,12 +320,12 @@ Player* PvpBotMgr::GetPvpBot(ObjectGuid::LowType lowGuid) const
 
 }
 
-Player* PvpBotMgr::GetPvpBot(uint32 guid) const
+/*Player* PvpBotMgr::GetPvpBot(uint32 guid) const
 {
     ObjectGuid::LowType lowGuid = guid;
     return GetPvpBot(lowGuid);
 
-}
+}*/
 
 uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
 {
