@@ -306,7 +306,7 @@ uint32 PvpBotMgr::AddPVPBots()
     return currentBots.size();
 }
 
-Player* PvpBotMgr::GetPvpBot(ObejctGuid playerGuid) const
+Player* PvpBotMgr::GetPvpBot(ObjectGuid playerGuid) const
 {
     PlayerBotMap::const_iterator it = pvpBots.find(playerGuid);
     return (it == pvpBots.end()) ? 0 : it->second;

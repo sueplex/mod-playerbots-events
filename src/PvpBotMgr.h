@@ -39,6 +39,7 @@ class PvpBotMgr : public PlayerbotHolder
         void UpdateAIInternal(uint32 elapsed, bool minimal = false) override;
         void CreatePvpBots();
         void GetBots();
+        Player* GetPvpBot(ObjectGuid playerGuid) const;
         uint32 AddPVPBots();
 
         uint32 GetEventValue(uint32 bot, std::string const event);
