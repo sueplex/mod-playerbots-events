@@ -306,11 +306,24 @@ uint32 PvpBotMgr::AddPVPBots()
     return currentBots.size();
 }
 
+Player* PvpBotMgr::GetPvpBot(ObjectGuid playerGuid) const
+{
+    PlayerBotMap::const_iterator it = pvpBots.find(playerGuid);
+    return (it == pvpBots.end()) ? 0 : it->second;
+
+}
+
 Player* PvpBotMgr::GetPvpBot(ObjectGuid::LowType lowGuid) const
 {
     ObjectGuid playerGuid = ObjectGuid::Create<HighGuid::Player>(lowGuid);
-    PlayerBotMap::const_iterator it = pvpBots.find(playerGuid);
-    return (it == pvpBots.end()) ? 0 : it->second;
+    return GetPvpBot(playerGuid);
+
+}
+
+Player* PvpBotMgr::GetPvpBot(uint32 guid) const
+{
+    ObjectGuid::LowType lowGuid = guid;
+    return GetPvpBot(lowGuid);
 
 }
 
