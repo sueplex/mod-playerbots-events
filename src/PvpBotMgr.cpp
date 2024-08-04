@@ -41,9 +41,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
     if (availableBotCount < maxAllowedBotCount)
     {
-        std::cout << "adding bots\n";
         AddPVPBots();
-        std::cout << "added bots\n";
     }
 
     // max Update 2?
@@ -59,7 +57,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
         // Update some of the bots?
         for (auto bot : availableBots)
         {
-            if (!GetPlayerBot(bot))
+            if (!GetPvpBot(bot))
                 continue;
             std::cout << "processing a bot\n";
             if (ProcessBot(bot))
@@ -79,7 +77,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
             LOG_INFO("playerbots", "{} new bots", loginBots);
             for (auto bot : availableBots)
             {
-                if (GetPlayerBot(bot))
+                if (GetPvpBot(bot))
                     continue;
 
                 std::cout << "logging in a bot\n";
@@ -259,7 +257,7 @@ uint32 PvpBotMgr::AddPVPBots()
                 if (GetEventValue(guid, "logout"))
                     continue;
 
-                if (GetPlayerBot(guid))
+                if (GetPvpBot(guid))
                     continue;
 
                 if (std::find(currentBots.begin(), currentBots.end(), guid) != currentBots.end())
@@ -285,7 +283,7 @@ uint32 PvpBotMgr::AddPVPBots()
             std::shuffle(guids.begin(), guids.end(), rnd);
 
             for (uint32 &guid : guids) {
-                uint32 add_time = 10;
+                uint32 add_time = 0;
                 std::cout << "setting add and logout\n";
 
                 SetEventValue(guid, "add", 1, add_time);
@@ -306,6 +304,13 @@ uint32 PvpBotMgr::AddPVPBots()
         }
     }
     return currentBots.size();
+}
+
+Player* PvpBotMgr::GetPvpBot(ObejctGuid playerGuid) const
+{
+    PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
+    return (it == playerBots.end()) ? 0 : it->second;
+
 }
 
 uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
@@ -398,7 +403,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 {
     ObjectGuid botGUID = ObjectGuid::Create<HighGuid::Player>(bot);
 
-    Player* player = GetPlayerBot(botGUID);
+    Player* player = GetPvpBot(botGUID);
     PlayerbotAI* botAI = player ? GET_PLAYERBOT_AI(player) : nullptr;
 
     uint32 isValid = GetEventValue(bot, "add");
