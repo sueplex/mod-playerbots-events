@@ -320,13 +320,6 @@ Player* PvpBotMgr::GetPvpBot(ObjectGuid::LowType lowGuid) const
 
 }
 
-/*Player* PvpBotMgr::GetPvpBot(uint32 guid) const
-{
-    ObjectGuid::LowType lowGuid = guid;
-    return GetPvpBot(lowGuid);
-
-}*/
-
 uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
 {
     // load all events at once on first event load
@@ -423,6 +416,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     uint32 isValid = GetEventValue(bot, "add");
     if (!isValid)
     {
+        std::cout << "is not valid?\n";
 		if (!player || !player->GetGroup())
 		{
             if (player)
@@ -430,6 +424,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             else
                 LOG_INFO("pvpbots", "Bot #{}: log out", bot);
 
+            std::cout << "erasing\n";
 			SetEventValue(bot, "add", 0, 0);
 			currentBots.erase(std::remove(currentBots.begin(), currentBots.end(), bot), currentBots.end());
 
@@ -446,6 +441,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
     if (!player)
     {
+        std::cout << "adding bot?\n";
         AddPlayerBot(botGUID, 0);
         SetEventValue(bot, "login", 1, 1);
 
@@ -464,6 +460,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             randomTime = urand(20 * 5, 20 * 20);
             ScheduleTeleport(bot, randomTime);
         }
+        std::cout << "returning\n";
         return true;
     }
 
