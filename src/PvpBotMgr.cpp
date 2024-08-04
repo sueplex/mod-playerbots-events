@@ -43,7 +43,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     {
         std::cout << "adding bots\n";
         // AddPVPBots();
-        return
+        return;
     }
 
     // max Update 2?
