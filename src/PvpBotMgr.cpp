@@ -42,7 +42,8 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     if (availableBotCount < maxAllowedBotCount)
     {
         std::cout << "adding bots\n";
-        AddPVPBots();
+        // AddPVPBots();
+        return
     }
 
     // max Update 2?
@@ -243,7 +244,7 @@ uint32 PvpBotMgr::AddPVPBots()
             uint32 accountId = *i;
             std::cout << "adding for " << accountId << "\n";
             if (!accountsAllow) {
-                std::cout << "breaking on account allow";
+                std::cout << "breaking on account allow\n";
                 break;
             }
 
