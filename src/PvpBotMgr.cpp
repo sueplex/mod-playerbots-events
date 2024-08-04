@@ -27,22 +27,25 @@ PvpBotMgr::~PvpBotMgr() {
 
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 {
-    std::cout << "updating internal Pvpbotmgr\n";
+    std::cout << "Updating internal Pvpbotmgr\n";
     // Get and Set Value for bot_count here?
     uint32 maxAllowedBotCount = 2;
 
     GetBots();
+    std::cout << "got bots\n";
     std::list<uint32> availableBots = currentBots;
 
     uint32 availableBotCount = availableBots.size();
-    uint32 onlineBotCount = playerBots.size();
+    uint32 onlineBotCount = pvpBots.size();
     // SetNextCheckDelay?
 
     if (availableBotCount < maxAllowedBotCount)
     {
+        std::cout << "adding bots\n";
         AddPVPBots();
     }
 
+    // max Update 2?
     uint32 updateBots = 2;
     uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
     uint32 loginBots = maxNewBots;
@@ -57,12 +60,14 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
         {
             if (!GetPlayerBot(bot))
                 continue;
+            std::cout << "processing a bot\n";
             if (ProcessBot(bot))
             {
                 updateBots--;
             }
 
             if (!updateBots)
+                std::cout << "breaking from update bots\n";
                 break;
         }
 
@@ -76,12 +81,14 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                 if (GetPlayerBot(bot))
                     continue;
 
+                std::cout << "logging in a bot\n";
                 if (ProcessBot(bot))
                 {
                     loginBots--;
                 }
 
                 if (!loginBots)
+                    std::cout << "breaking from loginbots\n";
                     break;
             }
         }
@@ -93,7 +100,6 @@ void PvpBotMgr::GetBots()
     if (!currentBots.empty())
         return;
 
-    uint32 maxAllowedBots = 2;
     PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_PVP_BOTS_BY_OWNER_AND_EVENT);
     stmt->SetData(0, 0);
     stmt->SetData(1, "add");
@@ -104,6 +110,7 @@ void PvpBotMgr::GetBots()
             Field* fields = result->Fetch();
             uint32 bot = fields[0].Get<uint32>();
             if (GetEventValue(bot, "add"))
+                std::cout << "pushing bot\n";
                 currentBots.push_back(bot);
         }
         while (result->NextRow());
@@ -112,7 +119,7 @@ void PvpBotMgr::GetBots()
 
 void PvpBotMgr::CreatePvpBots()
 {
-    uint32 totalAccCount = 80;
+    uint32 totalAccCount = 3;
 
     LOG_INFO("pvpbots", "Creating random bot accounts...");
 
@@ -149,7 +156,7 @@ void PvpBotMgr::CreatePvpBots()
 
     LOG_INFO("pvpbots", "Creating random bot characters...");
     uint32 totalPvpBotChars = 0;
-    uint32 totalCharCount = totalAccCount * 10;
+    uint32 totalCharCount = totalAccCount * 3;
 
     std::unordered_map<uint8,std::vector<std::string>> names;
     //std::vector<std::pair<Player*, uint32>> playerBots;
@@ -173,7 +180,7 @@ void PvpBotMgr::CreatePvpBots()
         pvpBotAccounts.push_back(accountId);
 
         uint32 count = AccountMgr::GetCharactersCount(accountId);
-        if (count >= 10)
+        if (count >= 5)
         {
             continue;
         }
@@ -229,6 +236,7 @@ uint32 PvpBotMgr::AddPVPBots()
     uint32 maxAllowedBots = 2;
     if (currentBots.size() < maxAllowedBots)
     {
+
         for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
         {
             uint32 accountId = *i;
@@ -267,25 +275,29 @@ uint32 PvpBotMgr::AddPVPBots()
                         continue;
                     }
                 }
+                std::cout << "pushing bot guid\n";
                 guids.push_back(guid);
             } while (result->NextRow());
 
-            /*std::mt19937 rnd(time(0));
-            std::shuffle(guids.begin(), guids.end(), rnd);*/
+            std::mt19937 rnd(time(0));
+            std::shuffle(guids.begin(), guids.end(), rnd);
 
             for (uint32 &guid : guids) {
-                uint32 add_time = 0;
+                uint32 add_time = 10;
+                std::cout << "setting add and logout\n";
 
                 SetEventValue(guid, "add", 1, add_time);
-                SetEventValue(guid, "logout", 0, 0);
+                SetEventValue(guid, "logout", 1, 900);
                 currentBots.push_back(guid);
 
                 maxAllowedBots--;
                 if (!maxAllowedBots)
+                    std::cout << "breaking for account\n";
                     break;
             }
 
             if (!maxAllowedBots)
+                std::cout << "breaking for add bots\n";
                 break;
         }
     }
