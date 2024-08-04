@@ -234,12 +234,21 @@ void PvpBotMgr::CreatePvpBots()
 uint32 PvpBotMgr::AddPVPBots()
 {
     uint32 maxAllowedBots = 2;
+    uint32 accountsAllow = 2;
     if (currentBots.size() < maxAllowedBots)
     {
 
         for (std::vector<uint32>::iterator i = pvpBotAccounts.begin(); i != pvpBotAccounts.end(); i++)
         {
             uint32 accountId = *i;
+            std::cout << "adding for " << accountId << "\n";
+            if (!accountsAllow) {
+                std::cout << "breaking on account allow";
+                break;
+            }
+
+            accountsAllow--;
+
 
             CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARS_BY_ACCOUNT_ID);
             stmt->SetData(0, accountId);
