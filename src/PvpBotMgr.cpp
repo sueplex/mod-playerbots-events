@@ -218,7 +218,7 @@ void PvpBotMgr::CreatePvpBots()
     if (bot_creation) {
         LOG_INFO("pvpbots", "Waiting for {} characters loading into database...", totalCharCount);
         /* wait for characters load into database, or characters will fail to loggin */
-        std::this_thread::sleep_for(10s);
+        std::this_thread::sleep_for(5s);
     }
 
     for (WorldSession* session : sessionBots)
@@ -286,8 +286,8 @@ uint32 PvpBotMgr::AddPVPBots()
                 uint32 add_time = 0;
                 std::cout << "setting add and logout\n";
 
-                SetEventValue(guid, "add", 1, add_time);
-                SetEventValue(guid, "logout", 1, 900);
+                SetEventValue(guid, "add", 1, 1);
+                SetEventValue(guid, "logout", 0, 0);
                 currentBots.push_back(guid);
 
                 maxAllowedBots--;
@@ -412,6 +412,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
     Player* player = GetPvpBot(botGUID);
     PlayerbotAI* botAI = player ? GET_PLAYERBOT_AI(player) : nullptr;
+    std::cout << player->GetName() << "\n";
 
     uint32 isValid = GetEventValue(bot, "add");
     if (!isValid)
