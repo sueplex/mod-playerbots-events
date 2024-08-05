@@ -419,7 +419,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     }
 
     uint32 isValid = GetEventValue(bot, "add");
-    if (!isValid)
+    if (!isValid && false)
     {
         std::cout << "is not valid?\n";
 		if (!player || !player->GetGroup())
