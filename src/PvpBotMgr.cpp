@@ -363,7 +363,7 @@ uint32 PvpBotMgr::GetEventValue(uint32 bot, std::string const event)
     }
     */
 
-    std::cout << eventName << ":\n";
+    std::cout << event << ":\n";
     std::cout << e.value << "\n";
     std::cout << e.validIn << "\n";
     std::cout << time(0) - e.lastChangeTime << "\n";
