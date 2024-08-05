@@ -412,7 +412,11 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
     Player* player = GetPvpBot(botGUID);
     PlayerbotAI* botAI = player ? GET_PLAYERBOT_AI(player) : nullptr;
-    std::cout << player->GetName() << "\n";
+    if (!player) {
+        std::cout << "no name\n";
+    } else {
+        std::cout << player->GetName() << "\n";
+    }
 
     uint32 isValid = GetEventValue(bot, "add");
     if (!isValid)
