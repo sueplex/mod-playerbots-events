@@ -36,7 +36,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     std::list<uint32> availableBots = currentBots;
 
     uint32 availableBotCount = availableBots.size();
-    uint32 onlineBotCount = pvpBots.size();
+    uint32 onlineBotCount = playerBots.size();
     // SetNextCheckDelay?
 
     if (availableBotCount < maxAllowedBotCount)
@@ -311,8 +311,8 @@ uint32 PvpBotMgr::AddPVPBots()
 
 Player* PvpBotMgr::GetPvpBot(ObjectGuid playerGuid) const
 {
-    PlayerBotMap::const_iterator it = pvpBots.find(playerGuid);
-    return (it == pvpBots.end()) ? 0 : it->second;
+    PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
+    return (it == playerBots.end()) ? 0 : it->second;
 
 }
 
@@ -658,7 +658,7 @@ void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
 
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
-    LOG_INFO("playerbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
+    LOG_INFO("playerbots", "{}/{} Bot {} logged in", playerBots.size(), 40, bot->GetName().c_str());
 }
 
 void PvpBotMgr::Randomize(Player* bot)
