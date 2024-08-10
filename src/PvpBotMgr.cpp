@@ -57,17 +57,21 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
         // Update some of the bots?
         for (auto bot : availableBots)
         {
-            if (!GetPvpBot(bot))
+            if (!GetPvpBot(bot)) {
+                std::cout << "failed to get bot in update\n";
                 continue;
+            }
+
             std::cout << "processing a bot\n";
             if (ProcessBot(bot))
             {
                 updateBots--;
             }
 
-            if (!updateBots)
+            if (!updateBots) {
                 std::cout << "breaking from update bots\n";
                 break;
+            }
         }
 
         if (loginBots)
@@ -86,9 +90,10 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                     loginBots--;
                 }
 
-                if (!loginBots)
+                if (!loginBots) {
                     std::cout << "breaking from loginbots\n";
                     break;
+                }
             }
         }
     }
@@ -275,7 +280,6 @@ uint32 PvpBotMgr::AddPVPBots()
                         continue;
                     }
                 }
-                std::cout << "pushing bot guid\n";
                 guids.push_back(guid);
             } while (result->NextRow());
 
@@ -284,9 +288,8 @@ uint32 PvpBotMgr::AddPVPBots()
 
             for (uint32 &guid : guids) {
                 uint32 add_time = 0;
-                std::cout << "setting add and logout\n";
 
-                SetEventValue(guid, "add", 1, 1);
+                SetEventValue(guid, "add", 1, 0);
                 SetEventValue(guid, "logout", 0, 0);
                 currentBots.push_back(guid);
 
@@ -423,9 +426,9 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     }
 
     uint32 isValid = GetEventValue(bot, "add");
+    std::cout << "is not valid? " << isValid << "\n";
     if (!isValid && false)
     {
-        std::cout << "is not valid?\n";
 		if (!player || !player->GetGroup())
 		{
             if (player)
@@ -464,12 +467,12 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             randomTime = urand(20 * 5, 20 * 20);
             ScheduleRandomize(bot, randomTime);
         }
-        if (!GetEventValue(bot, "teleport")) {
+        /*if (!GetEventValue(bot, "teleport")) {
             // TODO randomBotUpdateInterval
             randomTime = urand(20 * 5, 20 * 20);
             ScheduleTeleport(bot, randomTime);
-        }
-        std::cout << "returning\n";
+        }*/
+        //std::cout << "returning\n";
         return true;
     }
 
@@ -520,6 +523,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     uint32 logout = GetEventValue(bot, "logout");
     if (player && !logout && !isValid)
     {
+        std::cout << "setting logout?\n";
         LOG_INFO("playerbots", "Bot #{} {}:{} <{}>: log out", bot, IsAlliance(player->getRace()) ? "A" : "H", player->GetLevel(), player->GetName().c_str());
         LogoutPlayerBot(botGUID);
         currentBots.remove(bot);

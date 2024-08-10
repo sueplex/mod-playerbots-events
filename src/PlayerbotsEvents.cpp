@@ -40,6 +40,7 @@ bool PlayerbotsEvents::Initialize()
     LOG_INFO("server.loading", "PVPBots enabled, creating bots");
     sPvpMgr->CreatePvpBots();
     sPvpMgr->UpdateAIInternal(0, false);
+    sPvpMgr->UpdateAIInternal(0, false);
     return true;
 }
 
