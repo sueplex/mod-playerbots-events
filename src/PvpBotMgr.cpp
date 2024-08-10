@@ -311,6 +311,7 @@ uint32 PvpBotMgr::AddPVPBots()
 
 Player* PvpBotMgr::GetPvpBot(ObjectGuid playerGuid) const
 {
+    std::cout << "bots size: " << playerBots.size() << "\n";
     PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
     return (it == playerBots.end()) ? 0 : it->second;
 
@@ -658,7 +659,7 @@ void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
 
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
-    LOG_INFO("playerbots", "{}/{} Bot {} logged in", playerBots.size(), 40, bot->GetName().c_str());
+    LOG_INFO("playerbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
 }
 
 void PvpBotMgr::Randomize(Player* bot)
