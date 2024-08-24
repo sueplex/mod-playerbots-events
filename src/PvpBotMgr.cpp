@@ -84,9 +84,10 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
             for (auto bot : availableBots)
             {
                 std::cout << "Logging in bot: " << bot << "\n";
-                if (GetPvpBot(bot))
+                if (GetPvpBot(bot)) {
                     std::cout << "skipping, already exists\n";
                     continue;
+                }
 
                 if (ProcessBot(bot))
                 {
@@ -104,7 +105,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
 void PvpBotMgr::GetBots()
 {
-    std::cout << "GetBots\n"
+    std::cout << "GetBots\n";
     if (!currentBots.empty()) {
         std::cout<< "currentBots is emtpy\n";
         return;

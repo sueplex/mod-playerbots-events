@@ -131,7 +131,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     if (allowed && masterSession)
     {
         Player* player = masterSession->GetPlayer();
-        PlayerbotMgr* mgr = GET_PLAYERBOT_MGR(player);
+        PlayerbotMgr* mgr = GET_PVPPLAYERBOT_MGR(player);
         uint32 count = mgr->GetPlayerbotsCount();
         uint32 cls_count = mgr->GetPlayerbotsCountByClass(bot->getClass());
         if (count >= sPlayerbotAIConfig->maxAddedBots)
@@ -174,7 +174,7 @@ void PvpPlayerbotHolder::UpdateSessions()
         Player* const bot = itr->second;
         if (bot->IsBeingTeleported())
         {
-            PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+            PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
             if (botAI)
             {
                 botAI->HandleTeleportAck();
@@ -221,7 +221,7 @@ void PvpPlayerbotHolder::LogoutAllBots()
         if (!bot)
             continue;
 
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (!botAI || botAI->IsRealPlayer())
             continue;
 
@@ -238,7 +238,7 @@ void PvpPlayerbotMgr::CancelLogout()
     for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (!botAI || botAI->IsRealPlayer())
             continue;
 
@@ -254,7 +254,7 @@ void PvpPlayerbotMgr::CancelLogout()
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (!botAI || botAI->IsRealPlayer())
             continue;
 
@@ -273,7 +273,7 @@ void PvpPlayerbotHolder::LogoutPlayerBot(ObjectGuid guid)
 {
     if (Player* bot = GetPlayerBot(guid))
     {
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (!botAI)
             return;
 
@@ -370,7 +370,7 @@ void PvpPlayerbotHolder::DisablePlayerBot(ObjectGuid guid)
 {
     if (Player* bot = GetPlayerBot(guid))
     {
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (!botAI)
         {
             return;
@@ -427,7 +427,7 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     playerBots[bot->GetGUID()] = bot;
     OnBotLoginInternal(bot);
 
-    PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+    PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
     if (!botAI)
     {
         return;
@@ -552,8 +552,8 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     }
 
     // bots join World chat if not solo oriented
-    if (bot->GetLevel() >= 10 && sRandomPlayerbotMgr->IsRandomBot(bot) && GET_PLAYERBOT_AI(bot) &&
-        GET_PLAYERBOT_AI(bot)->GetGrouperType() != GrouperType::SOLO)
+    if (bot->GetLevel() >= 10 && sRandomPlayerbotMgr->IsRandomBot(bot) && GET_PVPPLAYERBOT_AI(bot) &&
+        GET_PVPPLAYERBOT_AI(bot)->GetGrouperType() != GrouperType::SOLO)
     {
         // TODO make action/config
         // Make the bot join the world channel for chat
@@ -667,9 +667,9 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
         }
     }
 
-    if (GET_PLAYERBOT_AI(bot))
+    if (GET_PVPPLAYERBOT_AI(bot))
     {
-        if (Player* master = GET_PLAYERBOT_AI(bot)->GetMaster())
+        if (Player* master = GET_PVPPLAYERBOT_AI(bot)->GetMaster())
         {
             if (master->GetSession()->GetSecurity() <= SEC_PLAYER && sPlayerbotAIConfig->autoInitOnly &&
                 cmd != "init=auto")
@@ -777,7 +777,7 @@ bool PvpPlayerbotMgr::HandlePvpPlayerbotMgrCommand(ChatHandler* handler, char co
     }
 
     Player* player = m_session->GetPlayer();
-    PvpPlayerbotMgr* mgr = GET_PLAYERBOT_MGR(player);
+    PvpPlayerbotMgr* mgr = GET_PVPPLAYERBOT_MGR(player);
     if (!mgr)
     {
         handler->PSendSysMessage("You cannot control bots yet");
@@ -910,10 +910,10 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
 
     if (!strcmp(cmd, "self"))
     {
-        if (GET_PLAYERBOT_AI(master))
+        if (GET_PVPPLAYERBOT_AI(master))
         {
             messages.push_back("Disable player botAI");
-            delete GET_PLAYERBOT_AI(master);
+            delete GET_PVPPLAYERBOT_AI(master);
         }
         else if (sPlayerbotAIConfig->selfBotLevel == 0)
             messages.push_back("Self-bot is disabled");
@@ -923,7 +923,7 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
         {
             messages.push_back("Enable player botAI");
             sPvpPlayerbotsMgr->AddPvpPlayerbotData(master, true);
-            GET_PLAYERBOT_AI(master)->SetMaster(master);
+            GET_PVPPLAYERBOT_AI(master)->SetMaster(master);
         }
 
         return messages;
@@ -1329,7 +1329,7 @@ void PvpPlayerbotMgr::HandleCommand(uint32 type, std::string const text)
     for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI)
             botAI->HandleCommand(type, text, master);
     }
@@ -1338,7 +1338,7 @@ void PvpPlayerbotMgr::HandleCommand(uint32 type, std::string const text)
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI && botAI->GetMaster() == master)
             botAI->HandleCommand(type, text, master);
     }
@@ -1351,7 +1351,7 @@ void PvpPlayerbotMgr::HandleMasterIncomingPacket(WorldPacket const& packet)
         Player* const bot = it->second;
         if (!bot)
             continue;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI)
             botAI->HandleMasterIncomingPacket(packet);
     }
@@ -1360,7 +1360,7 @@ void PvpPlayerbotMgr::HandleMasterIncomingPacket(WorldPacket const& packet)
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI && botAI->GetMaster() == GetMaster())
             botAI->HandleMasterIncomingPacket(packet);
     }
@@ -1387,7 +1387,7 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
     for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI)
             botAI->HandleMasterOutgoingPacket(packet);
     }
@@ -1396,7 +1396,7 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI && botAI->GetMaster() == GetMaster())
             botAI->HandleMasterOutgoingPacket(packet);
     }
@@ -1414,14 +1414,14 @@ void PvpPlayerbotMgr::SaveToDB()
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        if (GET_PLAYERBOT_AI(bot) && GET_PLAYERBOT_AI(bot)->GetMaster() == GetMaster())
+        if (GET_PVPPLAYERBOT_AI(bot) && GET_PVPPLAYERBOT_AI(bot)->GetMaster() == GetMaster())
             bot->SaveToDB(false, false);
     }
 }
 
 void PvpPlayerbotMgr::OnBotLoginInternal(Player* const bot)
 {
-    PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+    PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
     if (!botAI)
     {
         return;
@@ -1581,7 +1581,7 @@ PlayerbotAI* PvpPlayerbotsMgr::GetPvpPlayerbotAI(Player* player)
     return nullptr;
 }
 
-PlayerbotMgr* PlayerbotsMgr::GetPlayerbotMgr(Player* player)
+PvpPlayerbotMgr* PvpPlayerbotsMgr::GetPvpPlayerbotMgr(Player* player)
 {
     if (!(sPlayerbotAIConfig->enabled) || !player)
     {
