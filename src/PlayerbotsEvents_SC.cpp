@@ -45,10 +45,22 @@ public:
     }
 };
 
+// Add Playerbot Scripts
+class PlayerbotsEventsPlayerbots: public PlayerbotScript
+{
+public:
+    PlayerbotsEventsPlayerbots():  PlayerbotsEventsPlayerbots("PlayerbotsEventsPlayerbots") {}
+
+    OnPlayerbotUpdate(uint32 diff) override
+    {
+        sPvpPlayerbotsMgr->UpdateAI(diff);
+    }
+
 
 // Add all scripts in one
 void AddPlayerbotsEventsScripts()
 {
     new PlayerbotsEventsPlayer();
     new PlayerbotsEventsWorld();
+    new PlayerbotsEventsPlayerbots();
 }

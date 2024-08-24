@@ -792,6 +792,29 @@ void PvpBotMgr::RandomizeMin(Player* bot)
         pmo->finish();*/
 }
 
+void PvpBotMgr::IsPvpBot(Player* bot)
+{
+    if (bot && GET_PVPPLAYERBOT_AI(bot))
+    {
+        if (GET_PVPPLAYERBOT_AI(bot)->IsRealPlayer())
+            return false;
+    }
+    if (bot)
+    {
+        return IsPvpBot(bot->GetGUID().GetCounter());
+    }
+
+}
+
+void PvpBotMgr::IsPvpBot(ObjectGuid::LowType bot)
+{
+    ObjectGuid guid = ObjectGuid::Create<HighGuid::Player>(bot);
+    if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
+        return true;
+    std::cout << "was not playerbot? " << bot << "\n";
+    return false;
+}
+
 void PvpBotMgr::Clear(Player* bot)
 {
     PlayerbotFactory factory(bot, bot->GetLevel());
