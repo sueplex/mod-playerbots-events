@@ -51,7 +51,7 @@ class PlayerbotsEventsPlayerbots: public PlayerbotScript
 public:
     PlayerbotsEventsPlayerbots():  PlayerbotsEventsPlayerbots("PlayerbotsEventsPlayerbots") {}
 
-    OnPlayerbotUpdate(uint32 diff) override
+    void OnPlayerbotUpdate(uint32 diff) override
     {
         sPvpPlayerbotsMgr->UpdateAI(diff);
     }
