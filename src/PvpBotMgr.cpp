@@ -107,7 +107,7 @@ void PvpBotMgr::GetBots()
 {
     std::cout << "GetBots\n";
     if (!currentBots.empty()) {
-        std::cout<< "currentBots is emtpy\n";
+        std::cout<< "currentBots is not emtpy\n";
         return;
     }
 
@@ -303,7 +303,9 @@ uint32 PvpBotMgr::AddPVPBots()
 
                 SetEventValue(guid, "add", 1, 0);
                 SetEventValue(guid, "logout", 0, 0);
+                std::cout << "pushing back " << guid << "\n";
                 currentBots.push_back(guid);
+                std::cout << "cbsize: " << currentBots.size() << "\n";
 
                 maxAllowedBots--;
                 if (!maxAllowedBots) {
