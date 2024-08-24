@@ -12,11 +12,11 @@
 #include "QueryHolder.h"
 #include "QueryResult.h"
 
-/*class ChatHandler;
+class ChatHandler;
 class PlayerbotAI;
 class WorldPacket;
 
-typedef std::map<std::string, std::set<std::string> > PlayerBotErrorMap;*/
+typedef std::map<std::string, std::set<std::string> > PvpPlayerBotErrorMap;
 
 class PvpPlayerbotLoginQueryHolder;
 
@@ -87,7 +87,7 @@ protected:
 
 private:
     Player* const master;
-    PlayerBotErrorMap errors;
+    PvpPlayerBotErrorMap errors;
     time_t lastErrorTell;
 };
 

@@ -1485,7 +1485,7 @@ void PvpPlayerbotMgr::CheckTellErrors(uint32 elapsed)
 
     lastErrorTell = now;
 
-    for (PlayerBotErrorMap::iterator i = errors.begin(); i != errors.end(); ++i)
+    for (PvpPlayerBotErrorMap::iterator i = errors.begin(); i != errors.end(); ++i)
     {
         std::string const text = i->first;
         std::set<std::string> names = i->second;
