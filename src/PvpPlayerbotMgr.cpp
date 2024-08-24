@@ -30,21 +30,21 @@
 
 PvpPlayerbotHolder::PvpPlayerbotHolder() : PlayerbotAIBase(false) {}
 
-/*class PlayerbotLoginQueryHolder : public LoginQueryHolder
+class PvpPlayerbotLoginQueryHolder : public LoginQueryHolder
 {
 private:
     uint32 masterAccountId;
     PlayerbotHolder* playerbotHolder;
 
 public:
-    PlayerbotLoginQueryHolder(PlayerbotHolder* playerbotHolder, uint32 masterAccount, uint32 accountId, ObjectGuid guid)
+    PvpPlayerbotLoginQueryHolder(PlayerbotHolder* playerbotHolder, uint32 masterAccount, uint32 accountId, ObjectGuid guid)
         : LoginQueryHolder(accountId, guid), masterAccountId(masterAccount), playerbotHolder(playerbotHolder)
     {
     }
 
     uint32 GetMasterAccountId() const { return masterAccountId; }
     PlayerbotHolder* GetPlayerbotHolder() { return playerbotHolder; }
-};*/
+};
 
 void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccountId)
 {
@@ -57,8 +57,8 @@ void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccoun
     if (!accountId)
         return;
 
-    std::shared_ptr<PlayerbotLoginQueryHolder> holder =
-        std::make_shared<PlayerbotLoginQueryHolder>(this, masterAccountId, accountId, playerGuid);
+    std::shared_ptr<PvpPlayerbotLoginQueryHolder> holder =
+        std::make_shared<PvpPlayerbotLoginQueryHolder>(this, masterAccountId, accountId, playerGuid);
     if (!holder->Initialize())
     {
         return;
@@ -68,17 +68,17 @@ void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccoun
     {
         masterSession->AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder))
             .AfterComplete([this](SQLQueryHolderBase const& holder)
-                           { HandlePlayerBotLoginCallback(static_cast<PlayerbotLoginQueryHolder const&>(holder)); });
+                           { HandlePlayerBotLoginCallback(static_cast<PvpPlayerbotLoginQueryHolder const&>(holder)); });
     }
     else
     {
         sWorld->AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder))
             .AfterComplete([this](SQLQueryHolderBase const& holder)
-                           { HandlePlayerBotLoginCallback(static_cast<PlayerbotLoginQueryHolder const&>(holder)); });
+                           { HandlePlayerBotLoginCallback(static_cast<PvpPlayerbotLoginQueryHolder const&>(holder)); });
     }
 }
 
-void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PlayerbotLoginQueryHolder const& holder)
+void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHolder const& holder)
 {
     // has bot already been added?
     Player* loginBot = ObjectAccessor::FindConnectedPlayer(holder.GetGuid());
