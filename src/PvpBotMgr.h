@@ -49,6 +49,10 @@ class PvpBotMgr : public PvpPlayerbotHolder
         uint32 GetValue(Player* bot, std::string const type);
         uint32 GetValue(uint32 bot, std::string const type);
 
+        void IsPvpBot(Player* bot);
+        void IsPvpBot(ObjectGuid::LowType bot);
+
+
         void SetValue(uint32 bot, std::string const type, uint32 value, std::string const data = "");
         void SetValue(Player* bot, std::string const type, uint32 value, std::string const data = "");
 
