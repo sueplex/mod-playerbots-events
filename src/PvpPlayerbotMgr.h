@@ -35,8 +35,8 @@ public:
     void DisablePlayerBot(ObjectGuid guid);
     Player* GetPlayerBot(ObjectGuid guid) const;
     Player* GetPlayerBot(ObjectGuid::LowType lowGuid) const;
-    PlayerBotMap::const_iterator GetPlayerBotsBegin() const { return playerBots.begin(); }
-    PlayerBotMap::const_iterator GetPlayerBotsEnd() const { return playerBots.end(); }
+    PvpPlayerBotMap::const_iterator GetPlayerBotsBegin() const { return playerBots.begin(); }
+    PvpPlayerBotMap::const_iterator GetPlayerBotsEnd() const { return playerBots.end(); }
 
     void UpdateAIInternal([[maybe_unused]] uint32 elapsed, [[maybe_unused]] bool minimal = false) override{};
     void UpdateSessions();
@@ -58,7 +58,7 @@ public:
 protected:
     virtual void OnBotLoginInternal(Player* const bot) = 0;
 
-    PlayerBotMap playerBots;
+    PvpPlayerBotMap playerBots;
 };
 
 class PvpPlayerbotMgr : public PvpPlayerbotHolder
