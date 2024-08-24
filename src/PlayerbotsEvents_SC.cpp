@@ -49,7 +49,7 @@ public:
 class PlayerbotsEventsPlayerbots: public PlayerbotScript
 {
 public:
-    PlayerbotsEventsPlayerbots():  PlayerbotsEventsPlayerbots("PlayerbotsEventsPlayerbots") {}
+    PlayerbotsEventsPlayerbots():  PlayerbotsScript("PlayerbotsEventsPlayerbots") {}
 
     void OnPlayerbotUpdate(uint32 diff) override
     {
