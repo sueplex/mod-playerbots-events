@@ -34,7 +34,7 @@ class PvpPlayerbotLoginQueryHolder : public LoginQueryHolder
 {
 private:
     uint32 masterAccountId;
-    PvpPlayerbotHolder* playerbotHolder;
+    PvpPlayerbotHolder* pvpPlayerbotHolder;
 
 public:
     PvpPlayerbotLoginQueryHolder(PlayerbotHolder* playerbotHolder, uint32 masterAccount, uint32 accountId, ObjectGuid guid)
