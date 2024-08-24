@@ -43,7 +43,7 @@ public:
     }
 
     uint32 GetMasterAccountId() const { return masterAccountId; }
-    PvpPlayerbotHolder* GetPvpPlayerbotHolder() { return playerbotHolder; }
+    PvpPlayerbotHolder* GetPvpPlayerbotHolder() { return pvpPlayerbotHolder; }
 };
 
 void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccountId)
