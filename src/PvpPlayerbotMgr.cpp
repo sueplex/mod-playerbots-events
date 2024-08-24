@@ -25,6 +25,7 @@
 #include "PlayerbotMgr.h"
 #include "PlayerbotSecurity.h"
 #include "Playerbots.h"
+#include "PvpBotMgr.h"
 #include "SharedDefines.h"
 #include "WorldSession.h"
 

@@ -55,6 +55,7 @@ public:
     {
         sPvpPlayerbotsMgr->UpdateAI(diff);
     }
+};
 
 
 // Add all scripts in one
