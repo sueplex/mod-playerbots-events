@@ -19,6 +19,7 @@
 
 #include "ScriptMgr.h"
 #include "Player.h"
+#include "PvpBotsMgr.h"
 #include "World.h"
 
 // Add player scripts
@@ -53,7 +54,7 @@ public:
 
     void OnPlayerbotUpdate(uint32 diff) override
     {
-        sPvpPlayerbotsMgr->UpdateAI(diff);
+        sPvpMgr->UpdateAI(diff);
     }
 };
 
