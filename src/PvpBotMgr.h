@@ -34,7 +34,7 @@ class PvpBotMgr : public PvpPlayerbotHolder
             return &instance;
         }
 
-        //PlayerBotMap playerBots;
+        //PvpPlayerBotMap playerBots;
 
         void UpdateAIInternal(uint32 elapsed, bool minimal = false) override;
         void CreatePvpBots();
@@ -71,7 +71,7 @@ class PvpBotMgr : public PvpPlayerbotHolder
         void Revive(Player* player);
         void Refresh(Player* bot);
 
-        PlayerBotMap pvpBots;
+        PvpPlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;
         std::list<uint32> currentBots;
         std::map<uint32, std::map<std::string, CachedPvpEvent>> eventCache;

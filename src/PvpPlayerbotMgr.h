@@ -16,10 +16,11 @@
 class PlayerbotAI;
 class WorldPacket;
 
-typedef std::map<ObjectGuid, Player*> PlayerBotMap;
 typedef std::map<std::string, std::set<std::string> > PlayerBotErrorMap;*/
 
 class PvpPlayerbotLoginQueryHolder;
+
+typedef std::map<ObjectGuid, Player*> PvpPlayerBotMap;
 
 class PvpPlayerbotHolder : public PlayerbotAIBase
 {

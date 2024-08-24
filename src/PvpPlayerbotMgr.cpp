@@ -169,7 +169,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
 
 void PvpPlayerbotHolder::UpdateSessions()
 {
-    for (PlayerBotMap::const_iterator itr = GetPlayerBotsBegin(); itr != GetPlayerBotsEnd(); ++itr)
+    for (PvpPlayerBotMap::const_iterator itr = GetPlayerBotsBegin(); itr != GetPlayerBotsEnd(); ++itr)
     {
         Player* const bot = itr->second;
         if (bot->IsBeingTeleported())
@@ -204,7 +204,7 @@ void PvpPlayerbotHolder::LogoutAllBots()
     /*
     while (true)
     {
-        PlayerBotMap::const_iterator itr = GetPlayerBotsBegin();
+        PvpPlayerBotMap::const_iterator itr = GetPlayerBotsBegin();
         if (itr == GetPlayerBotsEnd())
             break;
 
@@ -214,7 +214,7 @@ void PvpPlayerbotHolder::LogoutAllBots()
     }
     */
 
-    PlayerBotMap bots = playerBots;
+    PvpPlayerBotMap bots = playerBots;
     for (auto& itr : bots)
     {
         Player* bot = itr.second;
@@ -235,7 +235,7 @@ void PvpPlayerbotMgr::CancelLogout()
     if (!master)
         return;
 
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
@@ -250,7 +250,7 @@ void PvpPlayerbotMgr::CancelLogout()
         }
     }
 
-    for (PlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
+    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
@@ -349,7 +349,7 @@ void PvpPlayerbotHolder::LogoutPlayerBot(ObjectGuid guid)
             }
             else
             {
-                playerBots.erase(guid);     // deletes bot player ptr inside this WorldSession PlayerBotMap
+                playerBots.erase(guid);     // deletes bot player ptr inside this WorldSession PvpPlayerBotMap
                 delete botWorldSessionPtr;  // finally delete the bot's WorldSession
                 if (target)
                     delete target;
@@ -359,7 +359,7 @@ void PvpPlayerbotHolder::LogoutPlayerBot(ObjectGuid guid)
         else if (bot && (logout || !botWorldSessionPtr->isLogingOut()))
         {
             botAI->TellMaster("Goodbye!");
-            playerBots.erase(guid);                  // deletes bot player ptr inside this WorldSession PlayerBotMap
+            playerBots.erase(guid);                  // deletes bot player ptr inside this WorldSession PvpPlayerBotMap
             botWorldSessionPtr->LogoutPlayer(true);  // this will delete the bot Player object and PlayerbotAI object
             delete botWorldSessionPtr;               // finally delete the bot's WorldSession
         }
@@ -396,7 +396,7 @@ void PvpPlayerbotHolder::DisablePlayerBot(ObjectGuid guid)
                 delete target;
         }
 
-        playerBots.erase(guid);  // deletes bot player ptr inside this WorldSession PlayerBotMap
+        playerBots.erase(guid);  // deletes bot player ptr inside this WorldSession PvpPlayerBotMap
 
         delete botAI;
     }
@@ -404,14 +404,14 @@ void PvpPlayerbotHolder::DisablePlayerBot(ObjectGuid guid)
 
 Player* PvpPlayerbotHolder::GetPlayerBot(ObjectGuid playerGuid) const
 {
-    PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
+    PvpPlayerBotMap::const_iterator it = playerBots.find(playerGuid);
     return (it == playerBots.end()) ? 0 : it->second;
 }
 
 Player* PvpPlayerbotHolder::GetPlayerBot(ObjectGuid::LowType lowGuid) const
 {
     ObjectGuid playerGuid = ObjectGuid::Create<HighGuid::Player>(lowGuid);
-    PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
+    PvpPlayerBotMap::const_iterator it = playerBots.find(playerGuid);
     return (it == playerBots.end()) ? 0 : it->second;
 }
 
@@ -1085,7 +1085,7 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
 
     if (charnameStr == "!" && master && master->GetSession()->GetSecurity() > SEC_GAMEMASTER)
     {
-        for (PlayerBotMap::const_iterator i = GetPlayerBotsBegin(); i != GetPlayerBotsEnd(); ++i)
+        for (PvpPlayerBotMap::const_iterator i = GetPlayerBotsBegin(); i != GetPlayerBotsEnd(); ++i)
         {
             if (Player* bot = i->second)
                 if (bot->IsInWorld())
@@ -1189,7 +1189,7 @@ std::string const PvpPlayerbotHolder::ListBots(Player* master)
     std::vector<std::string> names;
     std::map<std::string, std::string> classes;
 
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         std::string const name = bot->GetName();
@@ -1283,7 +1283,7 @@ std::string const PvpPlayerbotHolder::LookupBots(Player* master)
 uint32 PvpPlayerbotHolder::GetPvpPlayerbotsCountByClass(uint32 cls)
 {
     uint32 count = 0;
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         if (bot->getClass() == cls)
@@ -1326,7 +1326,7 @@ void PvpPlayerbotMgr::HandleCommand(uint32 type, std::string const text)
         return;
     }
 
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
@@ -1334,7 +1334,7 @@ void PvpPlayerbotMgr::HandleCommand(uint32 type, std::string const text)
             botAI->HandleCommand(type, text, master);
     }
 
-    for (PlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
+    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
@@ -1346,7 +1346,7 @@ void PvpPlayerbotMgr::HandleCommand(uint32 type, std::string const text)
 
 void PvpPlayerbotMgr::HandleMasterIncomingPacket(WorldPacket const& packet)
 {
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         if (!bot)
@@ -1356,7 +1356,7 @@ void PvpPlayerbotMgr::HandleMasterIncomingPacket(WorldPacket const& packet)
             botAI->HandleMasterIncomingPacket(packet);
     }
 
-    for (PlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
+    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
@@ -1384,7 +1384,7 @@ void PvpPlayerbotMgr::HandleMasterIncomingPacket(WorldPacket const& packet)
 
 void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
 {
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
@@ -1392,7 +1392,7 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
             botAI->HandleMasterOutgoingPacket(packet);
     }
 
-    for (PlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
+    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
@@ -1404,13 +1404,13 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
 
 void PvpPlayerbotMgr::SaveToDB()
 {
-    for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         bot->SaveToDB(false, false);
     }
 
-    for (PlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
+    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
          it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;

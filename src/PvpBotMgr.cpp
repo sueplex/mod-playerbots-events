@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "Playerbots.h"
 #include "PlayerbotFactory.h"
-#include "PlayerbotMgr.h"
+#include "PvpPlayerbotMgr.h"
 #include "RandomPlayerbotFactory.h"
 
 #include <cstdlib>
@@ -322,7 +322,7 @@ uint32 PvpBotMgr::AddPVPBots()
 Player* PvpBotMgr::GetPvpBot(ObjectGuid playerGuid) const
 {
     std::cout << "bots size: " << playerBots.size() << "\n";
-    PlayerBotMap::const_iterator it = playerBots.find(playerGuid);
+    PvpPlayerBotMap::const_iterator it = playerBots.find(playerGuid);
     return (it == playerBots.end()) ? 0 : it->second;
 
 }
