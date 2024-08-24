@@ -121,9 +121,10 @@ void PvpBotMgr::GetBots()
             Field* fields = result->Fetch();
             uint32 bot = fields[0].Get<uint32>();
             std::cout << "GetBots - Got Bot: " << bot << "\n";
-            if (GetEventValue(bot, "add"))
+            if (GetEventValue(bot, "add")) {
                 std::cout << "pushing bot\n";
                 currentBots.push_back(bot);
+            }
         }
         while (result->NextRow());
     }
@@ -245,7 +246,7 @@ void PvpBotMgr::CreatePvpBots()
 
 uint32 PvpBotMgr::AddPVPBots()
 {
-    std::cout << "AddPVPBots\n"
+    std::cout << "AddPVPBots\n";
     uint32 maxAllowedBots = 1;
     if (currentBots.size() < maxAllowedBots)
     {
