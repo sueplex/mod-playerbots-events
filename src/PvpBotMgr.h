@@ -5,7 +5,7 @@
 #include "Common.h"
 #include "Player.h"
 #include "PlayerbotAIBase.h"
-#include "PlayerbotMgr.h"
+#include "PvpPlayerbotMgr.h"
 
 class CachedPvpEvent
 {
@@ -23,7 +23,7 @@ class CachedPvpEvent
         std::string data;
 };
 
-class PvpBotMgr : public PlayerbotHolder
+class PvpBotMgr : public PvpPlayerbotHolder
 {
     public:
         PvpBotMgr();

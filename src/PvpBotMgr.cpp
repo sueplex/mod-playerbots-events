@@ -17,7 +17,7 @@
 #include <stdint.h>
 #include <vector>
 
-PvpBotMgr::PvpBotMgr() : PlayerbotHolder() {
+PvpBotMgr::PvpBotMgr() : PvpPlayerbotHolder() {
 
 }
 
@@ -27,9 +27,9 @@ PvpBotMgr::~PvpBotMgr() {
 
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 {
-    std::cout << "Updating internal Pvpbotmgr\n";
+    std::cout << "UpdateAIInternal\n";
     // Get and Set Value for bot_count here?
-    uint32 maxAllowedBotCount = 2;
+    uint32 maxAllowedBotCount = 1;
 
     GetBots();
     std::cout << "got bots\n";
@@ -41,11 +41,12 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
     if (availableBotCount < maxAllowedBotCount)
     {
+        std::cout << "adding bots\n";
         AddPVPBots();
     }
 
     // max Update 2?
-    uint32 updateBots = 2;
+    uint32 updateBots = 1;
     uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
     uint32 loginBots = maxNewBots;
 
@@ -57,6 +58,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
         // Update some of the bots?
         for (auto bot : availableBots)
         {
+            std::cout << "updating bot : " << bot << "\n";
             if (!GetPvpBot(bot)) {
                 std::cout << "failed to get bot in update\n";
                 continue;
@@ -81,10 +83,11 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
             LOG_INFO("playerbots", "{} new bots", loginBots);
             for (auto bot : availableBots)
             {
+                std::cout << "Logging in bot: " << bot << "\n";
                 if (GetPvpBot(bot))
+                    std::cout << "skipping, already exists\n";
                     continue;
 
-                std::cout << "logging in a bot\n";
                 if (ProcessBot(bot))
                 {
                     loginBots--;
@@ -101,8 +104,11 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
 void PvpBotMgr::GetBots()
 {
-    if (!currentBots.empty())
+    std::cout << "GetBots\n"
+    if (!currentBots.empty()) {
+        std::cout<< "currentBots is emtpy\n";
         return;
+    }
 
     PlayerbotsDatabasePreparedStatement* stmt = PlayerbotsDatabase.GetPreparedStatement(PLAYERBOTS_SEL_PVP_BOTS_BY_OWNER_AND_EVENT);
     stmt->SetData(0, 0);
@@ -113,6 +119,7 @@ void PvpBotMgr::GetBots()
         {
             Field* fields = result->Fetch();
             uint32 bot = fields[0].Get<uint32>();
+            std::cout << "GetBots - Got Bot: " << bot << "\n";
             if (GetEventValue(bot, "add"))
                 std::cout << "pushing bot\n";
                 currentBots.push_back(bot);
@@ -237,7 +244,8 @@ void PvpBotMgr::CreatePvpBots()
 
 uint32 PvpBotMgr::AddPVPBots()
 {
-    uint32 maxAllowedBots = 2;
+    std::cout << "AddPVPBots\n"
+    uint32 maxAllowedBots = 1;
     if (currentBots.size() < maxAllowedBots)
     {
 
@@ -280,6 +288,7 @@ uint32 PvpBotMgr::AddPVPBots()
                         continue;
                     }
                 }
+                std::cout << "Adding character: " << guid << "\n";
                 guids.push_back(guid);
             } while (result->NextRow());
 
@@ -288,6 +297,7 @@ uint32 PvpBotMgr::AddPVPBots()
 
             for (uint32 &guid : guids) {
                 uint32 add_time = 0;
+                std::<< "setting add and logout for " << guid << "\n";
 
                 SetEventValue(guid, "add", 1, 0);
                 SetEventValue(guid, "logout", 0, 0);
@@ -416,6 +426,7 @@ uint32 PvpBotMgr::SetEventValue(uint32 bot, std::string const event, uint32 valu
 
 bool PvpBotMgr::ProcessBot(uint32 bot)
 {
+    std::cout << "Processing Bot uint: " << bot << "\n";
     ObjectGuid botGUID = ObjectGuid::Create<HighGuid::Player>(bot);
 
     Player* player = GetPvpBot(botGUID);
@@ -538,6 +549,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 bool PvpBotMgr::ProcessBot(Player* player)
 {
     uint32 bot = player->GetGUID().GetCounter();
+    std::cout << "Process bot player: " << bot << "\n";
 
     if (player->InBattleground())
         return false;
