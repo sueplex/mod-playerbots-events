@@ -792,7 +792,7 @@ void PvpBotMgr::RandomizeMin(Player* bot)
         pmo->finish();*/
 }
 
-void PvpBotMgr::IsPvpBot(Player* bot)
+bool PvpBotMgr::IsPvpBot(Player* bot)
 {
     if (bot && GET_PVPPLAYERBOT_AI(bot))
     {
@@ -806,7 +806,7 @@ void PvpBotMgr::IsPvpBot(Player* bot)
 
 }
 
-void PvpBotMgr::IsPvpBot(ObjectGuid::LowType bot)
+bool PvpBotMgr::IsPvpBot(ObjectGuid::LowType bot)
 {
     ObjectGuid guid = ObjectGuid::Create<HighGuid::Player>(bot);
     if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
