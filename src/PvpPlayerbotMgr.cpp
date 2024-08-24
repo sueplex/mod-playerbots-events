@@ -131,7 +131,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     if (allowed && masterSession)
     {
         Player* player = masterSession->GetPlayer();
-        PlayerbotMgr* mgr = GET_PVPPLAYERBOT_MGR(player);
+        PvpPlayerbotMgr* mgr = GET_PVPPLAYERBOT_MGR(player);
         uint32 count = mgr->GetPlayerbotsCount();
         uint32 cls_count = mgr->GetPlayerbotsCountByClass(bot->getClass());
         if (count >= sPlayerbotAIConfig->maxAddedBots)

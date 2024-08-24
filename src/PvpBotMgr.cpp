@@ -299,7 +299,7 @@ uint32 PvpBotMgr::AddPVPBots()
 
             for (uint32 &guid : guids) {
                 uint32 add_time = 0;
-                std::<< "setting add and logout for " << guid << "\n";
+                std::cout << "setting add and logout for " << guid << "\n";
 
                 SetEventValue(guid, "add", 1, 0);
                 SetEventValue(guid, "logout", 0, 0);
