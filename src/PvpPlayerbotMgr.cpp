@@ -566,7 +566,7 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     }
 
     // bots join World chat if not solo oriented
-    if (bot->GetLevel() >= 10 && sPvpPlayerbotsMgr->IsPvpBot(bot) && GET_PVPPLAYERBOT_AI(bot) &&
+    if (bot->GetLevel() >= 10 && sPvpMgr->IsPvpBot(bot) && GET_PVPPLAYERBOT_AI(bot) &&
         GET_PVPPLAYERBOT_AI(bot)->GetGrouperType() != GrouperType::SOLO)
     {
         // TODO make action/config
@@ -623,7 +623,7 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
         return "bot system is disabled";
 
     uint32 botAccount = sCharacterCache->GetCharacterAccountIdByGuid(guid);
-    bool isRandomBot = sPvpPlayerbotsMgr->IsPvpBot(guid.GetCounter());
+    bool isRandomBot = sPvpMgr->IsPvpBot(guid.GetCounter());
     bool isRandomAccount = sPlayerbotAIConfig->IsInRandomAccountList(botAccount);
     bool isMasterAccount = (masterAccountId == botAccount);
 
@@ -1243,7 +1243,7 @@ std::string const PvpPlayerbotHolder::ListBots(Player* master)
         for (Group::member_citerator itr = groupSlot.begin(); itr != groupSlot.end(); itr++)
         {
             Player* member = ObjectAccessor::FindPlayer(itr->guid);
-            if (member && sPvpPlayerbotsMgr->IsPvpBot(member))
+            if (member && sPvpMgr->IsPvpBot(member))
             {
                 std::string const name = member->GetName();
 
