@@ -34,7 +34,7 @@ class PvpPlayerbotLoginQueryHolder : public LoginQueryHolder
 {
 private:
     uint32 masterAccountId;
-    PlayerbotHolder* playerbotHolder;
+    PvpPlayerbotHolder* playerbotHolder;
 
 public:
     PvpPlayerbotLoginQueryHolder(PlayerbotHolder* playerbotHolder, uint32 masterAccount, uint32 accountId, ObjectGuid guid)
@@ -43,7 +43,7 @@ public:
     }
 
     uint32 GetMasterAccountId() const { return masterAccountId; }
-    PlayerbotHolder* GetPlayerbotHolder() { return playerbotHolder; }
+    PvpPlayerbotHolder* GetPvpPlayerbotHolder() { return playerbotHolder; }
 };
 
 void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccountId)
@@ -132,8 +132,8 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     {
         Player* player = masterSession->GetPlayer();
         PvpPlayerbotMgr* mgr = GET_PVPPLAYERBOT_MGR(player);
-        uint32 count = mgr->GetPlayerbotsCount();
-        uint32 cls_count = mgr->GetPlayerbotsCountByClass(bot->getClass());
+        uint32 count = mgr->GetPvpPlayerbotsCount();
+        uint32 cls_count = mgr->GetPvpPlayerbotsCountByClass(bot->getClass());
         if (count >= sPlayerbotAIConfig->maxAddedBots)
         {
             allowed = false;
