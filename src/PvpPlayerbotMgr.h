@@ -14,11 +14,12 @@
 
 /*class ChatHandler;
 class PlayerbotAI;
-class PlayerbotLoginQueryHolder;
 class WorldPacket;
 
 typedef std::map<ObjectGuid, Player*> PlayerBotMap;
 typedef std::map<std::string, std::set<std::string> > PlayerBotErrorMap;*/
+
+class PvpPlayerbotLoginQueryHolder;
 
 class PvpPlayerbotHolder : public PlayerbotAIBase
 {
@@ -27,7 +28,7 @@ public:
     virtual ~PvpPlayerbotHolder(){};
 
     void AddPlayerBot(ObjectGuid guid, uint32 masterAccountId);
-    void HandlePlayerBotLoginCallback(PlayerbotLoginQueryHolder const& holder);
+    void HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHolder const& holder);
 
     void LogoutPlayerBot(ObjectGuid guid);
     void DisablePlayerBot(ObjectGuid guid);
