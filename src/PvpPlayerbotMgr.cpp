@@ -1299,7 +1299,7 @@ PvpPlayerbotMgr::PvpPlayerbotMgr(Player* const master) : PvpPlayerbotHolder(), m
 PvpPlayerbotMgr::~PvpPlayerbotMgr()
 {
     if (master)
-        sPvpPlayerbotsMgr->RemovePlayerBotData(master->GetGUID(), false);
+        sPvpPlayerbotsMgr->RemovePvpPlayerBotData(master->GetGUID(), false);
 }
 
 void PvpPlayerbotMgr::UpdateAIInternal(uint32 elapsed, bool /*minimal*/)
@@ -1542,7 +1542,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
     }
 }
 
-void PvpPlayerbotsMgr::RemovePlayerBotData(ObjectGuid const& guid, bool is_AI)
+void PvpPlayerbotsMgr::RemovePvpPlayerBotData(ObjectGuid const& guid, bool is_AI)
 {
     if (is_AI)
     {
