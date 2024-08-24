@@ -132,7 +132,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     {
         allowed = true;
     }
-    else if (sPlayerbotAIConfig->IsInRandomAccountList(botAccountId))
+    else if (true) //sPlayerbotAIConfig->IsInRandomAccountList(botAccountId))
     {
         allowed = true;
     }
