@@ -38,7 +38,7 @@ private:
 
 public:
     PvpPlayerbotLoginQueryHolder(PlayerbotHolder* playerbotHolder, uint32 masterAccount, uint32 accountId, ObjectGuid guid)
-        : LoginQueryHolder(accountId, guid), masterAccountId(masterAccount), playerbotHolder(playerbotHolder)
+        : LoginQueryHolder(accountId, guid), masterAccountId(masterAccount), pvpPlayerbotHolder(pvpPlayerbotHolder)
     {
     }
 
