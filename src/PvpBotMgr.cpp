@@ -682,6 +682,134 @@ void PvpBotMgr::RandomTeleport(Player* bot)
     Refresh(bot);
 }
 
+void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bool hearth)
+{
+    if (bot->IsBeingTeleported())
+        return;
+
+    if (bot->InBattleground())
+        return;
+
+    if (bot->InBattlegroundQueue())
+        return;
+
+    // if (bot->GetLevel() < 5)
+    //     return;
+
+    // if (sPlayerbotAIConfig->randomBotRpgChance < 0)
+    //     return;
+
+    if (locs.empty())
+    {
+        LOG_DEBUG("playerbots", "Cannot teleport bot {} - no locations available", bot->GetName().c_str());
+        return;
+    }
+
+    std::vector<WorldPosition> tlocs;
+    for (auto& loc : locs)
+        tlocs.push_back(WorldPosition(loc));
+    // Do not teleport to maps disabled in config
+    tlocs.erase(std::remove_if(tlocs.begin(), tlocs.end(),
+                               [bot](WorldPosition l)
+                               {
+                                   std::vector<uint32>::iterator i =
+                                       find(sPlayerbotAIConfig->randomBotMaps.begin(),
+                                            sPlayerbotAIConfig->randomBotMaps.end(), l.getMapId());
+                                   return i == sPlayerbotAIConfig->randomBotMaps.end();
+                               }),
+                tlocs.end());
+    if (tlocs.empty())
+    {
+        LOG_DEBUG("playerbots", "Cannot teleport bot {} - all locations removed by filter", bot->GetName().c_str());
+        return;
+    }
+
+    if (tlocs.empty())
+    {
+        LOG_DEBUG("playerbots", "Cannot teleport bot {} - no locations available", bot->GetName().c_str());
+        return;
+    }
+
+    std::shuffle(std::begin(tlocs), std::end(tlocs), RandomEngine::Instance());
+    for (uint32 i = 0; i < tlocs.size(); i++)
+    {
+        WorldLocation loc = tlocs[i];
+
+        float x = loc.GetPositionX();  // + (attemtps > 0 ? urand(0, sPlayerbotAIConfig->grindDistance) -
+                                       // sPlayerbotAIConfig->grindDistance / 2 : 0);
+        float y = loc.GetPositionY();  // + (attemtps > 0 ? urand(0, sPlayerbotAIConfig->grindDistance) -
+                                       // sPlayerbotAIConfig->grindDistance / 2 : 0);
+        float z = loc.GetPositionZ();
+
+        Map* map = sMapMgr->FindMap(loc.GetMapId(), 0);
+        if (!map)
+            continue;
+
+        AreaTableEntry const* zone = sAreaTableStore.LookupEntry(map->GetZoneId(bot->GetPhaseMask(), x, y, z));
+        if (!zone)
+            continue;
+
+        AreaTableEntry const* area = sAreaTableStore.LookupEntry(map->GetAreaId(bot->GetPhaseMask(), x, y, z));
+        if (!area)
+            continue;
+
+        // Do not teleport to enemy zones if level is low
+        if (zone->team == 4 && bot->GetTeamId() == TEAM_ALLIANCE)
+            continue;
+
+        if (zone->team == 2 && bot->GetTeamId() == TEAM_HORDE)
+            continue;
+
+        if (map->IsInWater(bot->GetPhaseMask(), x, y, z, bot->GetCollisionHeight()))
+            continue;
+
+        float ground = map->GetHeight(bot->GetPhaseMask(), x, y, z + 0.5f);
+        if (ground <= INVALID_HEIGHT)
+            continue;
+
+        z = 0.05f + ground;
+        PlayerInfo const* pInfo = sObjectMgr->GetPlayerInfo(bot->getRace(true), bot->getClass());
+        float dis = loc.GetExactDist(pInfo->positionX, pInfo->positionY, pInfo->positionZ);
+        // yunfan: distance check for low level
+        if (bot->GetLevel() <= 4 && (loc.GetMapId() != pInfo->mapId || dis > 500.0f))
+        {
+            continue;
+        }
+        if (bot->GetLevel() <= 10 && (loc.GetMapId() != pInfo->mapId || dis > 2500.0f))
+        {
+            continue;
+        }
+        if (bot->GetLevel() <= 18 && (loc.GetMapId() != pInfo->mapId || dis > 10000.0f))
+        {
+            continue;
+        }
+
+        const LocaleConstant& locale = sWorld->GetDefaultDbcLocale();
+        LOG_INFO("playerbots",
+                 "Random teleporting bot {} (level {}) to Map: {} ({}) Zone: {} ({}) Area: {} ({}) {},{},{} ({}/{} "
+                 "locations)",
+                 bot->GetName().c_str(), bot->GetLevel(), map->GetId(), map->GetMapName(), zone->ID,
+                 zone->area_name[locale], area->ID, area->area_name[locale], x, y, z, i + 1, tlocs.size());
+
+        if (hearth)
+        {
+            bot->SetHomebind(loc, zone->ID);
+        }
+
+        bot->GetMotionMaster()->Clear();
+        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        if (botAI)
+            botAI->Reset(true);
+        bot->TeleportTo(loc.GetMapId(), x, y, z, 0);
+        bot->SendMovementFlagUpdate();
+
+        return;
+    }
+
+    LOG_ERROR("playerbots", "Cannot teleport bot {} - no locations available ({} locations)", bot->GetName().c_str(),
+              tlocs.size());
+}
+
 
 void PvpBotMgr::ScheduleRandomize(uint32 bot, uint32 time)
 {

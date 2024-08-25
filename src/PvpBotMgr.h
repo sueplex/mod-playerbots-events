@@ -67,6 +67,7 @@ class PvpBotMgr : public PvpPlayerbotHolder
         void ScheduleTeleport(uint32 bot, uint32 time = 0);
         void ScheduleChangeStrategy(uint32 bot, uint32 time = 0);
 
+        void RandomTeleport(Player* bot);
         void RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bool hearth = false);
         void RandomTeleportGrindForLevel(Player* bot);
         void RandomTeleportForLevel(Player* bot);
