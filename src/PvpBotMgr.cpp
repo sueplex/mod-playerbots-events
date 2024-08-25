@@ -665,8 +665,8 @@ void PvpBotMgr::RandomTeleport(Player* bot)
 
     std::list<Unit*> targets;
     float range = sPlayerbotAIConfig->randomBotTeleportDistance;
-    Acore::AnyUnitInObjectRangeCheck u_check(bot, range);
-    Acore::UnitListSearcher<Acore::AnyUnitInObjectRangeCheck> searcher(bot, targets, u_check);
+    Acore::AnyUnitInObjectRangeCheck _ = u_check(bot, range);
+    Acore::UnitListSearcher<Acore::AnyUnitInObjectRangeCheck> _ = searcher(bot, targets, u_check);
     Cell::VisitAllObjects(bot, searcher, range);
 
     if (!targets.empty())
