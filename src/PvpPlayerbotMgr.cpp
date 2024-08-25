@@ -254,8 +254,8 @@ void PvpPlayerbotMgr::CancelLogout()
         }
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
-         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin();
+         it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
