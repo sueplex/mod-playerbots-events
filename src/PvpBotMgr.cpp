@@ -9,8 +9,9 @@
 #include "Define.h"
 #include "FleeManager.h"
 #include "GameTime.h"
+#include "GridNotifiers.h"
+#include "GridNotifiersImpl.h"
 #include "MapMgr.h"
-
 #include "Player.h"
 #include "Playerbots.h"
 #include "PlayerbotFactory.h"
@@ -665,8 +666,8 @@ void PvpBotMgr::RandomTeleport(Player* bot)
 
     std::list<Unit*> targets;
     float range = sPlayerbotAIConfig->randomBotTeleportDistance;
-    Acore::AnyUnitInObjectRangeCheck _ = u_check(bot, range);
-    Acore::UnitListSearcher<Acore::AnyUnitInObjectRangeCheck> _ = searcher(bot, targets, u_check);
+    Acore::AnyUnitInObjectRangeCheck u_check(bot, range);
+    Acore::UnitListSearcher<Acore::AnyUnitInObjectRangeCheck> searcher(bot, targets, u_check);
     Cell::VisitAllObjects(bot, searcher, range);
 
     if (!targets.empty())
