@@ -1319,7 +1319,7 @@ PvpPlayerbotMgr::~PvpPlayerbotMgr()
 
 void PvpPlayerbotMgr::UpdateAIInternal(uint32 elapsed, bool /*minimal*/)
 {
-    SetNextCheckDelay(sPlayerbotAIConfig->reactDelay);
+    SetNextCheckDelay(5);//sPlayerbotAIConfig->reactDelay);
     CheckTellErrors(elapsed);
 }
 

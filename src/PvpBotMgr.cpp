@@ -414,8 +414,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     }
 
     uint32 isValid = GetEventValue(bot, "add");
-    std::cout << "is not valid? " << isValid << "\n";
-    if (!isValid && false)
+    if (!isValid)
     {
 		if (!player || !player->GetGroup())
 		{
@@ -433,6 +432,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
         return false;
     }
+    std::cout << "is valid? " << isValid << "\n";
 
     uint32 isLogginIn = GetEventValue(bot, "login");
     if (isLogginIn)
