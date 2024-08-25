@@ -490,7 +490,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
 
         if (update) {
-            std::cout << "updating" << player->GetName() << \n";
+            std::cout << "updating" << player->GetName() << "\n";
             ProcessBot(player);
         }
 
