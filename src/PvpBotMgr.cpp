@@ -826,7 +826,7 @@ void PvpBotMgr::Revive(Player* player)
 
 void PvpBotMgr::Refresh(Player* bot)
 {
-    std::cout << "Refreshing " bot->GetName() << "\n";
+    std::cout << "Refreshing " << bot->GetName() << "\n";
     PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
     if (!botAI) {
         std::cout << "No botAI :(\n";
