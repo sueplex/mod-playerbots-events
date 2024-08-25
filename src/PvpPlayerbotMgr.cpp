@@ -157,6 +157,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     else
     {
         if (masterSession)
+        Refresh(player);
         {
             ChatHandler ch(masterSession);
             ch.SendSysMessage(out.str());
@@ -418,6 +419,7 @@ Player* PvpPlayerbotHolder::GetPlayerBot(ObjectGuid::LowType lowGuid) const
     PvpPlayerBotMap::const_iterator it = playerBots.find(playerGuid);
     return (it == playerBots.end()) ? 0 : it->second;
 }
+
 
 void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
 {
@@ -764,6 +766,40 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
 
     return "unknown command";
 }
+
+void PlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
+{
+    if (!player)
+    {
+        return;
+    }
+    // If the guid already exists in the map, remove it
+
+    if (!isBotAI)
+    {
+        std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsMgrMap.find(player->GetGUID());
+        if (itr != _playerbotsMgrMap.end())
+        {
+            _playerbotsMgrMap.erase(itr);
+        }
+        PvpPlayerbotMgr* pvpPlayerbotMgr = new PvpPlayerbotMgr(player);
+        ASSERT(_playerbotsMgrMap.emplace(player->GetGUID(), pvpPlayerbotMgr).second);
+
+        pvpPlayerbotMgr->OnPlayerLogin(player);
+    }
+    else
+    {
+        std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsAIMap.find(player->GetGUID());
+        if (itr != _playerbotsAIMap.end())
+        {
+            _playerbotsAIMap.erase(itr);
+        }
+        PlayerbotAI* botAI = new PlayerbotAI(player);
+        ASSERT(_playerbotsAIMap.emplace(player->GetGUID(), botAI).second);
+    }
+}
+
+
 
 bool PvpPlayerbotMgr::HandlePvpPlayerbotMgrCommand(ChatHandler* handler, char const* args)
 {
@@ -1514,37 +1550,6 @@ void PvpPlayerbotMgr::CheckTellErrors(uint32 elapsed)
     errors.clear();
 }
 
-void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
-{
-    if (!player)
-    {
-        return;
-    }
-    // If the guid already exists in the map, remove it
-
-    if (!isBotAI)
-    {
-        std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsMgrMap.find(player->GetGUID());
-        if (itr != _playerbotsMgrMap.end())
-        {
-            _playerbotsMgrMap.erase(itr);
-        }
-        PvpPlayerbotMgr* playerbotMgr = new PvpPlayerbotMgr(player);
-        ASSERT(_playerbotsMgrMap.emplace(player->GetGUID(), playerbotMgr).second);
-
-        playerbotMgr->OnPlayerLogin(player);
-    }
-    else
-    {
-        std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsAIMap.find(player->GetGUID());
-        if (itr != _playerbotsAIMap.end())
-        {
-            _playerbotsAIMap.erase(itr);
-        }
-        PlayerbotAI* botAI = new PlayerbotAI(player);
-        ASSERT(_playerbotsAIMap.emplace(player->GetGUID(), botAI).second);
-    }
-}
 
 void PvpPlayerbotsMgr::RemovePvpPlayerBotData(ObjectGuid const& guid, bool is_AI)
 {

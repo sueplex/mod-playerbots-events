@@ -72,6 +72,7 @@ public:
     void HandleMasterOutgoingPacket(WorldPacket const& packet);
     void HandleCommand(uint32 type, std::string const text);
     void OnPlayerLogin(Player* player);
+    void AddPvpPlayerbotData(Player* player, bool isBotAI);
     void CancelLogout();
 
     void UpdateAIInternal(uint32 elapsed, bool minimal = false) override;
