@@ -49,17 +49,14 @@ public:
 
 void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccountId)
 {
-    std::cout << "AddPlayerbot\n";
     // has bot already been added?
     Player* bot = ObjectAccessor::FindConnectedPlayer(playerGuid);
     if (bot && bot->IsInWorld()) {
-        std::cout << "Bot in world\n";
         return;
     }
 
     uint32 accountId = sCharacterCache->GetCharacterAccountIdByGuid(playerGuid);
     if (!accountId) {
-        std::cout << "Did not find account ID\n";
         return;
     }
 
@@ -67,20 +64,17 @@ void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccoun
         std::make_shared<PvpPlayerbotLoginQueryHolder>(this, masterAccountId, accountId, playerGuid);
     if (!holder->Initialize())
     {
-        std::cout << "did not initialize\n";
         return;
     }
 
     if (WorldSession* masterSession = sWorld->FindSession(masterAccountId))
     {
-        std::cout << "found master session?\n";
         masterSession->AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder))
             .AfterComplete([this](SQLQueryHolderBase const& holder)
                            { HandlePlayerBotLoginCallback(static_cast<PvpPlayerbotLoginQueryHolder const&>(holder)); });
     }
     else
     {
-        std::cout << "did not find session for master session\n";
         sWorld->AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder))
             .AfterComplete([this](SQLQueryHolderBase const& holder)
                            { HandlePlayerBotLoginCallback(static_cast<PvpPlayerbotLoginQueryHolder const&>(holder)); });
@@ -89,12 +83,10 @@ void PvpPlayerbotHolder::AddPlayerBot(ObjectGuid playerGuid, uint32 masterAccoun
 
 void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHolder const& holder)
 {
-    std::cout << "HandlePlayerBotLoginCallback\n";
     // has bot already been added?
     Player* loginBot = ObjectAccessor::FindConnectedPlayer(holder.GetGuid());
     if (loginBot && loginBot->IsInWorld())
     {
-        std::cout << "Bot already in world?\n";
         return;
     }
 
@@ -107,11 +99,9 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
 
     botSession->HandlePlayerLoginFromDB(holder);  // will delete lqh
 
-    std::cout << "made bot session\n";
     Player* bot = botSession->GetPlayer();
     if (!bot)
     {
-        std::cout << "no bot\n";
         botSession->LogoutPlayer(true);
         delete botSession;
         // LOG_ERROR("playerbots", "Error logging in bot {}, please try to reset all random bots",
@@ -123,7 +113,6 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     WorldSession* masterSession = masterAccount ? sWorld->FindSession(masterAccount) : nullptr;
     std::ostringstream out;
     bool allowed = false;
-    std::cout << "checking if allowed\n";
     if (botAccountId == masterAccount)
     {
         allowed = true;
@@ -1319,7 +1308,7 @@ PvpPlayerbotMgr::~PvpPlayerbotMgr()
 
 void PvpPlayerbotMgr::UpdateAIInternal(uint32 elapsed, bool /*minimal*/)
 {
-    SetNextCheckDelay(5000);//sPlayerbotAIConfig->reactDelay);
+    SetNextCheckDelay(sPlayerbotAIConfig->reactDelay);
     CheckTellErrors(elapsed);
 }
 

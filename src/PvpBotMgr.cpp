@@ -35,7 +35,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
     uint32 availableBotCount = availableBots.size();
     uint32 onlineBotCount = playerBots.size();
-    // SetNextCheckDelay?
+    SetNextCheckDelay(10);
 
     if (availableBotCount < maxAllowedBotCount)
     {
@@ -490,7 +490,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
 
         if (update) {
-            std::cout << "updating" << player->GetName() << "\n";
             ProcessBot(player);
         }
 
@@ -498,7 +497,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         uint32 randomTime = urand(60, 100);
         SetEventValue(bot, "update", 1, randomTime);
 
-        std::cout << "returning post update?\n";
         return true;
     }
 
@@ -518,7 +516,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 bool PvpBotMgr::ProcessBot(Player* player)
 {
     uint32 bot = player->GetGUID().GetCounter();
-    std::cout << "Process bot player: " << bot << "\n";
+    std::cout << "Process bot: " << player->GetName() << "\n";
 
     if (player->InBattleground())
         return false;
@@ -583,6 +581,7 @@ bool PvpBotMgr::ProcessBot(Player* player)
     if (!randomize)
     {
         Randomize(player);
+        Refresh(player);
         LOG_INFO("playerbots", "Bot #{} {}:{} <{}>: randomized", bot, player->GetTeamId() == TEAM_ALLIANCE ? "A" : "H", player->GetLevel(), player->GetName());
         // TODO schedule new randomize?
         /*uint32 randomTime = urand(sPlayerbotAIConfig->minRandomBotRandomizeTime, sPlayerbotAIConfig->maxRandomBotRandomizeTime);
@@ -598,7 +597,6 @@ bool PvpBotMgr::ProcessBot(Player* player)
     if (!teleport)
     {
         LOG_INFO("playerbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
-        Refresh(player);
         RandomTeleportForLevel(player);
         uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
         ScheduleTeleport(bot, time);
@@ -828,9 +826,12 @@ void PvpBotMgr::Revive(Player* player)
 
 void PvpBotMgr::Refresh(Player* bot)
 {
+    std::cout << "Refreshing " bot->GetName() << "\n";
     PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
-    if (!botAI)
+    if (!botAI) {
+        std::cout << "No botAI :(\n";
         return;
+    }
 
     if (bot->isDead())
     {
