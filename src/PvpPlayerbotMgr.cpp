@@ -771,7 +771,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
     if (!player)
     {
-std:cout << "no player??\n";
+        std::cout << "no player??\n";
         return;
     }
     // If the guid already exists in the map, remove it
