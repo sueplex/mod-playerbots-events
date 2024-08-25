@@ -2,6 +2,7 @@
 
 #include "PvpBotMgr.h"
 #include "AccountMgr.h"
+#include "CellImpl.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "GameTime.h"
