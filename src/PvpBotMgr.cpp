@@ -837,11 +837,11 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
         ObjectGuid::LowType guid = player->GetGUID().GetCounter();
         SetEventValue(guid, "login", 0, 0);
     }
-    else
+    /*else
     {
         players.push_back(player);
         LOG_DEBUG("playerbots", "Including non-random bot player {} into random bot update", player->GetName().c_str());
-    }
+    }*/
 
 }
 
