@@ -1,16 +1,25 @@
 
 
 #include "PvpBotMgr.h"
+#include "AiFactory.h"
 #include "AccountMgr.h"
 #include "CellImpl.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
+#include "Define.h"
+#include "FleeManager.h"
 #include "GameTime.h"
+#include "MapMgr.h"
+
 #include "Player.h"
 #include "Playerbots.h"
 #include "PlayerbotFactory.h"
 #include "PvpPlayerbotMgr.h"
+#include "Random.h"
 #include "RandomPlayerbotFactory.h"
+#include "ServerFacade.h"
+#include "SharedDefines.h"
+#include "Unit.h"
 
 #include <cstdlib>
 #include <iostream>
