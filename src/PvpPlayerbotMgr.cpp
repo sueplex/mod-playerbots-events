@@ -157,7 +157,6 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     else
     {
         if (masterSession)
-        Refresh(player);
         {
             ChatHandler ch(masterSession);
             ch.SendSysMessage(out.str());
