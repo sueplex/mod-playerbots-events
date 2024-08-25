@@ -151,7 +151,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     }
     if (allowed)
     {
-        sRandomPlayerbotMgr->OnPlayerLogin(bot);
+        sPvpPlayerbotsMgr->OnPlayerLogin(bot);
         OnBotLogin(bot);
     }
     else
@@ -254,8 +254,8 @@ void PvpPlayerbotMgr::CancelLogout()
         }
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
-         it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
+         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
@@ -766,7 +766,7 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
     return "unknown command";
 }
 
-void PlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
+void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
     if (!player)
     {
@@ -1431,8 +1431,8 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
             botAI->HandleMasterOutgoingPacket(packet);
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
-         it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
+         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
@@ -1449,8 +1449,8 @@ void PvpPlayerbotMgr::SaveToDB()
         bot->SaveToDB(false, false);
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sRandomPlayerbotMgr->GetPlayerBotsBegin();
-         it != sRandomPlayerbotMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
+         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         if (GET_PVPPLAYERBOT_AI(bot) && GET_PVPPLAYERBOT_AI(bot)->GetMaster() == GetMaster())
