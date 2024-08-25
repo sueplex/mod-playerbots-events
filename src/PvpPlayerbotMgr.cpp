@@ -151,7 +151,7 @@ void PvpPlayerbotHolder::HandlePlayerBotLoginCallback(PvpPlayerbotLoginQueryHold
     }
     if (allowed)
     {
-        sPvpPlayerbotsMgr->OnPlayerLogin(bot);
+        sPvpMgr->OnPlayerLogin(bot);
         OnBotLogin(bot);
     }
     else
