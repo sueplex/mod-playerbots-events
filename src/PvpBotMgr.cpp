@@ -754,7 +754,7 @@ void PvpBotMgr::RandomizeMin(Player* bot)
         pmo->finish();*/
 }
 
-void OnPlayerLogin(Player* player)
+void PvpBotMgr::OnPlayerLogin(Player* player)
 {
     uint32 botsNearby = 0;
 
