@@ -104,6 +104,7 @@ public:
         return &instance;
     }
 
+    void OnPlayerLogin(Player* player);
     void AddPvpPlayerbotData(Player* player, bool isBotAI);
     void RemovePvpPlayerBotData(ObjectGuid const& guid, bool is_AI);
 
