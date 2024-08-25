@@ -48,8 +48,8 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
     uint32 loginBots = maxNewBots;
 
-    LOG_INFO("server.loading", "have {} bots available", availableBots.size());
-    LOG_INFO("server.loading", "have {} bots currently", currentBots.size());
+    /*LOG_INFO("server.loading", "have {} bots available", availableBots.size());
+    LOG_INFO("server.loading", "have {} bots currently", currentBots.size());*/
 
     if (!availableBots.empty())
     {
@@ -409,9 +409,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
     Player* player = GetPvpBot(botGUID);
     PlayerbotAI* botAI = player ? GET_PLAYERBOT_AI(player) : nullptr;
-    if (player) {
-        std::cout << player->GetName() << "\n";
-    }
 
     uint32 isValid = GetEventValue(bot, "add");
     if (!isValid)
@@ -432,7 +429,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
         return false;
     }
-    std::cout << "is valid? " << isValid << "\n";
 
     uint32 isLogginIn = GetEventValue(bot, "login");
     if (isLogginIn)
@@ -495,13 +491,16 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             //     update = false;
         }
 
-        if (update)
+        if (update) {
+            std::cout << "updating\n";
             ProcessBot(player);
+        }
 
         // TODO min / maxRandomBotReviveTime
         uint32 randomTime = urand(60, 100);
         SetEventValue(bot, "update", 1, randomTime);
 
+        std::cout << "returning post update?\n";
         return true;
     }
 
