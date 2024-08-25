@@ -27,7 +27,6 @@ PvpBotMgr::~PvpBotMgr() {
 
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 {
-    std::cout << "UpdateAIInternal\n";
     // Get and Set Value for bot_count here?
     uint32 maxAllowedBotCount = 1;
 
@@ -287,7 +286,6 @@ uint32 PvpBotMgr::AddPVPBots()
                 SetEventValue(guid, "add", 1, add_time);
                 SetEventValue(guid, "logout", 0, 0);
                 currentBots.push_back(guid);
-                std::cout << "cbsize: " << currentBots.size() << "\n";
 
                 maxAllowedBots--;
                 if (!maxAllowedBots) {
@@ -492,7 +490,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
 
         if (update) {
-            std::cout << "updating\n";
+            std::cout << "updating" << player->GetName() << \n";
             ProcessBot(player);
         }
 
@@ -657,7 +655,6 @@ void PvpBotMgr::Randomize(Player* bot)
         uint8 level = bot->GetLevel();
         PlayerbotFactory factory(bot, level);
         factory.Randomize(true);
-        // IncreaseLevel(bot);
     }
     else {
         RandomizeFirst(bot);
