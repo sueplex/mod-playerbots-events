@@ -1502,7 +1502,7 @@ void PvpPlayerbotMgr::OnPlayerLogin(Player* player)
                 out << ",";
 
             out << fields[0].Get<std::string>();
-        } while (resulPVPts->NextRow());
+        } while (results->NextRow());
 
         HandlePvpPlayerbotCommand(out.str().c_str(), player);
     }
