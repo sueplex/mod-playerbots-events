@@ -1431,8 +1431,8 @@ void PvpPlayerbotMgr::HandleMasterOutgoingPacket(WorldPacket const& packet)
             botAI->HandleMasterOutgoingPacket(packet);
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
-         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin();
+         it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
@@ -1449,8 +1449,8 @@ void PvpPlayerbotMgr::SaveToDB()
         bot->SaveToDB(false, false);
     }
 
-    for (PvpPlayerBotMap::const_iterator it = sPvpPlayerbotsMgr->GetPlayerBotsBegin();
-         it != sPvpPlayerbotsMgr->GetPlayerBotsEnd(); ++it)
+    for (PvpPlayerBotMap::const_iterator it = GetPlayerBotsBegin();
+         it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
         if (GET_PVPPLAYERBOT_AI(bot) && GET_PVPPLAYERBOT_AI(bot)->GetMaster() == GetMaster())
