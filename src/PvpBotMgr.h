@@ -67,6 +67,10 @@ class PvpBotMgr : public PvpPlayerbotHolder
         void ScheduleTeleport(uint32 bot, uint32 time = 0);
         void ScheduleChangeStrategy(uint32 bot, uint32 time = 0);
 
+        void RandomTeleport(Player* bot);
+        void RandomTeleportGrindForLevel(Player* bot);
+        void RandomTeleportForLevel(Player* bot);
+
         void Randomize(Player* bot);
         void Clear(Player* bot);
         void RandomizeFirst(Player* bot);
@@ -79,7 +83,10 @@ class PvpBotMgr : public PvpPlayerbotHolder
         PvpPlayerBotMap pvpBots;
         std::vector<uint32> pvpBotAccounts;
         std::list<uint32> currentBots;
+
         std::map<uint32, std::map<std::string, CachedPvpEvent>> eventCache;
+        std::map<uint8, std::vector<WorldLocation>> locsPerLevelCache;
+
 
 };
 

@@ -448,11 +448,11 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             randomTime = urand(20 * 5, 20 * 20);
             ScheduleRandomize(bot, randomTime);
         }
-        /*if (!GetEventValue(bot, "teleport")) {
+        if (!GetEventValue(bot, "teleport")) {
             // TODO randomBotUpdateInterval
-            randomTime = urand(20 * 5, 20 * 20);
+            randomTime = urand(20 * 2, 20 * 10);
             ScheduleTeleport(bot, randomTime);
-        }*/
+        }
         return true;
     }
 
@@ -593,16 +593,16 @@ bool PvpBotMgr::ProcessBot(Player* player)
     // enable random teleport logic if no auto traveling enabled
     // if (!sPlayerbotAIConfig->autoDoQuests)
     // {
-    /*  TODO handle telporting bots around
+    // TODO handle telporting bots around
     uint32 teleport = GetEventValue(bot, "teleport");
     if (!teleport)
     {
-        LOG_INFO("playerbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
+        LOG_INFO("pvpbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
         RandomTeleportForLevel(player);
         uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
         ScheduleTeleport(bot, time);
         return true;
-    }*/
+    }
     // }
 
     // uint32 changeStrategy = GetEventValue(bot, "change_strategy");
@@ -614,6 +614,72 @@ bool PvpBotMgr::ProcessBot(Player* player)
     // }
 
     return false;
+}
+
+
+void PvpBotMgr::RandomTeleportForLevel(Player* bot)
+{
+    if (bot->InBattleground())
+        return;
+
+    uint32 level = bot->GetLevel();
+    uint8 race = bot->getRace();
+    LOG_DEBUG("pvpbots", "Random teleporting bot {} for level {} ({} locations available)", bot->GetName().c_str(),
+              bot->GetLevel(), locsPerLevelCache[level].size());
+    /*
+    if (level > 10 && urand(0, 100) < sPlayerbotAIConfig->probTeleToBankers * 100)
+    {
+        RandomTeleport(bot, bankerLocsPerLevelCache[level], true);
+    }*/
+    RandomTeleport(bot, locsPerLevelCache[level]);
+}
+
+void PvpBotMgr::RandomTeleportGrindForLevel(Player* bot)
+{
+    if (bot->InBattleground())
+        return;
+
+    uint32 level = bot->GetLevel();
+    uint8 race = bot->getRace();
+    LOG_DEBUG("playerbots", "Random teleporting bot {} for level {} ({} locations available)", bot->GetName().c_str(),
+              bot->GetLevel(), locsPerLevelCache[level].size());
+
+    RandomTeleport(bot, locsPerLevelCache[level]);
+}
+
+void PvpBotMgr::RandomTeleport(Player* bot)
+{
+    if (bot->InBattleground())
+        return;
+
+    std::vector<WorldLocation> locs;
+
+    std::list<Unit*> targets;
+    float range = sPlayerbotAIConfig->randomBotTeleportDistance;
+    Acore::AnyUnitInObjectRangeCheck u_check(bot, range);
+    Acore::UnitListSearcher<Acore::AnyUnitInObjectRangeCheck> searcher(bot, targets, u_check);
+    Cell::VisitAllObjects(bot, searcher, range);
+
+    if (!targets.empty())
+    {
+        for (Unit* unit : targets)
+        {
+            bot->UpdatePosition(*unit);
+            FleeManager manager(bot, sPlayerbotAIConfig->sightDistance, 0, true);
+            float rx, ry, rz;
+            if (manager.CalculateDestination(&rx, &ry, &rz))
+            {
+                WorldLocation loc(bot->GetMapId(), rx, ry, rz);
+                locs.push_back(loc);
+            }
+        }
+    }
+    else
+    {
+        RandomTeleportForLevel(bot);
+    }
+
+    Refresh(bot);
 }
 
 
