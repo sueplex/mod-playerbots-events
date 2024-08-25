@@ -282,9 +282,9 @@ uint32 PvpBotMgr::AddPVPBots()
             std::shuffle(guids.begin(), guids.end(), rnd);
 
             for (uint32 &guid : guids) {
-                uint32 add_time = 0;
+                uint32 add_time = urand(360, 3600);
 
-                SetEventValue(guid, "add", 1, 0);
+                SetEventValue(guid, "add", 1, add_time);
                 SetEventValue(guid, "logout", 0, 0);
                 currentBots.push_back(guid);
                 std::cout << "cbsize: " << currentBots.size() << "\n";
