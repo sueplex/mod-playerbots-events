@@ -407,7 +407,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     ObjectGuid botGUID = ObjectGuid::Create<HighGuid::Player>(bot);
 
     Player* player = GetPvpBot(botGUID);
-    PlayerbotAI* botAI = player ? GET_PLAYERBOT_AI(player) : nullptr;
+    PlayerbotAI* botAI = player ? GET_PVPPLAYERBOT_AI(player) : nullptr;
 
     uint32 isValid = GetEventValue(bot, "add");
     if (!isValid)
@@ -479,7 +479,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
             if (player->GetGroup() && botAI->GetGroupMaster())
             {
-                PlayerbotAI* groupMasterBotAI = GET_PLAYERBOT_AI(botAI->GetGroupMaster());
+                PlayerbotAI* groupMasterBotAI = GET_PVPPLAYERBOT_AI(botAI->GetGroupMaster());
                 if (!groupMasterBotAI || groupMasterBotAI->IsRealPlayer())
                 {
                     update = false;
@@ -708,8 +708,8 @@ void PvpBotMgr::RandomizeFirst(Player* bot)
     PlayerbotsDatabase.Execute(stmt);
 
     // teleport to a random inn for bot level
-    if (GET_PLAYERBOT_AI(bot))
-        GET_PLAYERBOT_AI(bot)->Reset(true);
+    if (GET_PVPPLAYERBOT_AI(bot))
+        GET_PVPPLAYERBOT_AI(bot)->Reset(true);
 
     if (bot->GetGroup())
         bot->RemoveFromGroup();
@@ -745,8 +745,8 @@ void PvpBotMgr::RandomizeMin(Player* bot)
     PlayerbotsDatabase.Execute(stmt);
 
     // teleport to a random inn for bot level
-    if (GET_PLAYERBOT_AI(bot))
-        GET_PLAYERBOT_AI(bot)->Reset(true);
+    if (GET_PVPPLAYERBOT_AI(bot))
+        GET_PVPPLAYERBOT_AI(bot)->Reset(true);
 
     if (bot->GetGroup())
         bot->RemoveFromGroup();
@@ -762,7 +762,7 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
     for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
     {
         Player* const bot = it->second;
-        if (player == bot /* || GET_PLAYERBOT_AI(player)*/)  // TEST
+        if (player == bot /* || GET_PVPPLAYERBOT_AI(player)*/)  // TEST
             continue;
 
         Cell playerCell(player->GetPositionX(), player->GetPositionY());
@@ -778,8 +778,8 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
         for (GroupReference* gref = group->GetFirstMember(); gref; gref = gref->next())
         {
             Player* member = gref->GetSource();
-            PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
-            if (botAI && member == player && (!botAI->GetMaster() || GET_PLAYERBOT_AI(botAI->GetMaster())))
+            PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
+            if (botAI && member == player && (!botAI->GetMaster() || GET_PVPPLAYERBOT_AI(botAI->GetMaster())))
             {
                 if (!bot->InBattleground())
                 {
@@ -919,7 +919,7 @@ void PvpBotMgr::Revive(Player* player)
 void PvpBotMgr::Refresh(Player* bot)
 {
     std::cout << "Refreshing " << bot->GetName() << "\n";
-    PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+    PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
     if (!botAI) {
         std::cout << "No botAI :(\n";
         return;

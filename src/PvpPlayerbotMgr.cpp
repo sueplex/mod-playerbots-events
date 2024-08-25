@@ -435,6 +435,7 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
     if (!botAI)
     {
+        std::cout << "no bot AI after login?\n";
         return;
     }
     Player* master = botAI->GetMaster();
@@ -770,6 +771,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
     if (!player)
     {
+std:cout << "no player??\n";
         return;
     }
     // If the guid already exists in the map, remove it
@@ -788,6 +790,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
     }
     else
     {
+        std::cout << "setting ai\n";
         std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsAIMap.find(player->GetGUID());
         if (itr != _playerbotsAIMap.end())
         {
@@ -1499,7 +1502,7 @@ void PvpPlayerbotMgr::OnPlayerLogin(Player* player)
                 out << ",";
 
             out << fields[0].Get<std::string>();
-        } while (results->NextRow());
+        } while (resulPVPts->NextRow());
 
         HandlePvpPlayerbotCommand(out.str().c_str(), player);
     }
