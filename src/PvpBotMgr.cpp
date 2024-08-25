@@ -832,7 +832,7 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
         // player->Relocate(botPos.getX(), botPos.getY(), botPos.getZ(), botPos.getO());
     }
 
-    if (IsRandomBot(player))
+    if (IsPvpBot(player))
     {
         ObjectGuid::LowType guid = player->GetGUID().GetCounter();
         SetEventValue(guid, "login", 0, 0);
