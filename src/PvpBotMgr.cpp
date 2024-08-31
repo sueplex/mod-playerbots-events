@@ -487,6 +487,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             // TODO IsPvpBot method
             /*if (!sPvpBotMgr->IsRandomBot(player))*/
             if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
+                std::cout<< "Bailing because in current bots?\n";
                 update = false;
 
             if (player->GetGroup() && botAI->GetGroupMaster())
@@ -1048,6 +1049,7 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
     {
         ObjectGuid::LowType guid = player->GetGUID().GetCounter();
         SetEventValue(guid, "login", 0, 0);
+        Refresh(player);
     }
     /*else
     {
