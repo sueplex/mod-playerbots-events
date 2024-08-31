@@ -422,9 +422,11 @@ Player* PvpPlayerbotHolder::GetPlayerBot(ObjectGuid::LowType lowGuid) const
 
 void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
 {
+    std::cout << "OnBotLogin?\n";
     // Prevent duplicate login
     if (playerBots.find(bot->GetGUID()) != playerBots.end())
     {
+        std::cout << "bailing dup\n";
         return;
     }
 
@@ -769,6 +771,7 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
 
 void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
+    std::cout << "setting pvp bot data\n";
     if (!player)
     {
         std::cout << "no player??\n";
@@ -778,6 +781,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 
     if (!isBotAI)
     {
+        std::cout << "Is not bot AI?\n";
         std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsMgrMap.find(player->GetGUID());
         if (itr != _playerbotsMgrMap.end())
         {

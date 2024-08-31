@@ -851,7 +851,7 @@ void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
 
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
-    LOG_INFO("playerbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
+    LOG_INFO("pvpbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
 }
 
 void PvpBotMgr::Randomize(Player* bot)
@@ -969,6 +969,7 @@ void PvpBotMgr::RandomizeMin(Player* bot)
 
 void PvpBotMgr::OnPlayerLogin(Player* player)
 {
+    std::cout << "OnPlayerLogin\n";
     uint32 botsNearby = 0;
 
     for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
@@ -1055,7 +1056,6 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
         players.push_back(player);
         LOG_DEBUG("playerbots", "Including non-random bot player {} into random bot update", player->GetName().c_str());
     }*/
-
 }
 
 bool PvpBotMgr::IsPvpBot(Player* bot)
