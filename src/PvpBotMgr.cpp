@@ -70,7 +70,6 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                 continue;
             }
 
-            std::cout << "process available bot\n";
             if (ProcessBot(bot))
             {
                 updateBots--;
@@ -92,7 +91,6 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                     continue;
                 }
 
-                std::cout << "process login bot\n";
                 if (ProcessBot(bot))
                 {
                     loginBots--;
