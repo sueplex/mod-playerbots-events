@@ -851,6 +851,7 @@ void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
     LOG_INFO("pvpbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
+    Refresh(player);
 }
 
 void PvpBotMgr::Randomize(Player* bot)
@@ -1049,7 +1050,6 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
     {
         ObjectGuid::LowType guid = player->GetGUID().GetCounter();
         SetEventValue(guid, "login", 0, 0);
-        Refresh(player);
     }
     /*else
     {
