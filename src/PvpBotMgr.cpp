@@ -70,6 +70,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                 continue;
             }
 
+            std::cout << "process available bot\n";
             if (ProcessBot(bot))
             {
                 updateBots--;
@@ -91,6 +92,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
                     continue;
                 }
 
+                std::cout << "process login bot\n";
                 if (ProcessBot(bot))
                 {
                     loginBots--;
@@ -458,9 +460,11 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             randomTime = urand(20 * 5, 20 * 20);
             ScheduleRandomize(bot, randomTime);
         }
+
         if (!GetEventValue(bot, "teleport")) {
             // TODO randomBotUpdateInterval
             randomTime = urand(20 * 2, 20 * 10);
+            std::cout << "setting teleport: " << randomTime << "\n";
             ScheduleTeleport(bot, randomTime);
         }
         return true;
@@ -501,6 +505,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
 
         if (update) {
+            std::cout << "Updating Bot\n";
             ProcessBot(player);
         }
 
@@ -591,7 +596,9 @@ bool PvpBotMgr::ProcessBot(Player* player)
     uint32 randomize = GetEventValue(bot, "randomize");
     if (!randomize)
     {
+        std::cout << "Randomizing\n";
         Randomize(player);
+        std::cout << "Refreshing from process\n";
         Refresh(player);
         LOG_INFO("playerbots", "Bot #{} {}:{} <{}>: randomized", bot, player->GetTeamId() == TEAM_ALLIANCE ? "A" : "H", player->GetLevel(), player->GetName());
         // TODO schedule new randomize?
@@ -607,6 +614,7 @@ bool PvpBotMgr::ProcessBot(Player* player)
     uint32 teleport = GetEventValue(bot, "teleport");
     if (!teleport)
     {
+        std::cout << "teleporting?\n";
         LOG_INFO("pvpbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
         RandomTeleportForLevel(player);
         uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
@@ -688,7 +696,7 @@ void PvpBotMgr::RandomTeleport(Player* bot)
     {
         RandomTeleportForLevel(bot);
     }
-
+    std::cout << "Refreshing from teleport\n";
     Refresh(bot);
 }
 
