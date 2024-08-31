@@ -486,10 +486,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             //botAI->GetAiObjectContext()->GetValue<bool>("random bot update")->Set(true);
             // TODO IsPvpBot method
             /*if (!sPvpBotMgr->IsRandomBot(player))*/
-            if (std::find(currentBots.begin(), currentBots.end(), bot) != currentBots.end())
-                std::cout<< "Bailing because in current bots?\n";
-                update = false;
-
             if (player->GetGroup() && botAI->GetGroupMaster())
             {
                 PlayerbotAI* groupMasterBotAI = GET_PVPPLAYERBOT_AI(botAI->GetGroupMaster());
@@ -851,7 +847,6 @@ void PvpBotMgr::ScheduleChangeStrategy(uint32 bot, uint32 time){
 void PvpBotMgr::OnBotLoginInternal(Player * const bot)
 {
     LOG_INFO("pvpbots", "{}/{} Bot {} logged in", pvpBots.size(), 40, bot->GetName().c_str());
-    Refresh(bot);
 }
 
 void PvpBotMgr::Randomize(Player* bot)
