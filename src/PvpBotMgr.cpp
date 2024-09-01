@@ -1131,6 +1131,7 @@ void PvpBotMgr::Refresh(Player* bot)
         std::cout << "No botAI :(\n";
         return;
     }
+    std::cout << "Bot Active?: " << botAI->IsActive() << "\n";
 
     if (bot->isDead())
     {

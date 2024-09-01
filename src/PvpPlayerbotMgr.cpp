@@ -507,8 +507,6 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     // set delay on login
     botAI->SetNextCheckDelay(urand(2000, 4000));
 
-    botAI->TellMaster("Hello!", PLAYERBOT_SECURITY_TALK);
-
     if (master && master->GetGroup() && !group)
     {
         Group* mgroup = master->GetGroup();
@@ -1472,7 +1470,7 @@ void PvpPlayerbotMgr::OnBotLoginInternal(Player* const bot)
     {
         return;
     }
-    botAI->SetMaster(master);
+    //botAI->SetMaster(master);
     botAI->ResetStrategies();
 
     LOG_INFO("playerbots", "Bot {} logged in", bot->GetName().c_str());
