@@ -186,6 +186,7 @@ void PvpPlayerbotHolder::UpdateSessions()
         }
         else if (bot->IsInWorld())
         {
+            std::cout << "Handling packets\n";
             HandleBotPackets(bot->GetSession());
         }
     }
@@ -199,6 +200,7 @@ void PvpPlayerbotHolder::HandleBotPackets(WorldSession* session)
         OpcodeClient opcode = static_cast<OpcodeClient>(packet->GetOpcode());
         ClientOpcodeHandler const* opHandle = opcodeTable[opcode];
         opHandle->Call(session, *packet);
+        std::cout << "Handled: " << opcode << "\n";
         delete packet;
     }
 }
