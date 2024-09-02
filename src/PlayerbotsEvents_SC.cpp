@@ -55,6 +55,25 @@ public:
     void OnPlayerbotUpdate(uint32 diff) override
     {
         sPvpMgr->UpdateAI(diff);
+        sPvpMgr->UpdateSessions();
+    }
+
+    void OnPlayerbotUpdateSessions(Player* player) override
+    {
+        if (player)
+            if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+                playerbotMgr->UpdateSessions();
+    }
+
+    void OnPlayerbotPacketSent(Player* player, WorldPacket const* packet) override
+    {
+        if (!player)
+            return;
+
+        if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
+        {
+            botAI->HandleBotOutgoingPacket(*packet);
+        }
     }
 };
 
