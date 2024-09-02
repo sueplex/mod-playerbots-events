@@ -186,7 +186,6 @@ void PvpPlayerbotHolder::UpdateSessions()
         }
         else if (bot->IsInWorld())
         {
-            std::cout << "Handling packets\n";
             HandleBotPackets(bot->GetSession());
         }
     }
