@@ -20,6 +20,7 @@
 #include "ScriptMgr.h"
 #include "Player.h"
 #include "PvpBotMgr.h"
+#include "PvpPlayerBotMgr.h"
 #include "World.h"
 
 // Add player scripts
