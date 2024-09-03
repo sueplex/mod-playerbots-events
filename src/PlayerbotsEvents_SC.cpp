@@ -75,8 +75,27 @@ public:
         {
             botAI->HandleBotOutgoingPacket(*packet);
         }
+        if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+        {
+            playerbotMgr->HandleMasterOutgoingPacket(*packet);
+        }
+
     }
 };
+
+class PlayerbotsEventsServerScript : public ServerScript
+{
+public:
+    PlayerbotsEventsServerScript() : ServerScript("PlayerbotsEventsServerScript") {}
+
+    void OnPacketReceived(WorldSession* session, WorldPacket const& packet) override
+    {
+        if (Player* player = session->GetPlayer())
+            if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+                playerbotMgr->HandleMasterIncomingPacket(packet);
+    }
+};
+
 
 
 // Add all scripts in one
@@ -85,4 +104,5 @@ void AddPlayerbotsEventsScripts()
     new PlayerbotsEventsPlayer();
     new PlayerbotsEventsWorld();
     new PlayerbotsEventsPlayerbots();
+    new PlayerbotsEventsServerScript();
 }
