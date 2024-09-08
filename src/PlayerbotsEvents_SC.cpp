@@ -29,7 +29,7 @@ class PlayerbotsEventsPlayer : public PlayerScript
 public:
     PlayerbotsEventsPlayer() : PlayerScript("PlayerbotsEventsPlayer") { }
 
-    void OnLogin(Player* player) override
+    /*void OnLogin(Player* player) override
     {
         if (!player->GetSession()->IsBot())
         {
@@ -38,7 +38,7 @@ public:
             sPvpMgr->OnPlayerLogin(player);
             std::cout << "OnLogin Handled\n";
         }
-    }
+    }*/
 
     void OnAfterUpdate(Player* player, uint32 diff) override
     {
