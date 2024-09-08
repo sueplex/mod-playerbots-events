@@ -808,6 +808,7 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 
 bool PvpPlayerbotMgr::HandlePvpPlayerbotMgrCommand(ChatHandler* handler, char const* args)
 {
+    std::cout << "in here?\n";
     if (!sPlayerbotAIConfig->enabled)
     {
         handler->PSendSysMessage("|cffff0000Playerbot system is currently disabled!");
