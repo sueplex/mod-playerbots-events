@@ -40,7 +40,7 @@ public:
         }
     }
 
-    void OnAfterUpdate(Player* player, uint32 diff) override
+    /*void OnAfterUpdate(Player* player, uint32 diff) override
     {
         if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
         {
@@ -53,7 +53,7 @@ public:
             playerbotMgr->UpdateAI(diff);
             std::cout << "updated PVP AI\n";
         }
-    }
+    }*/
 
     /*bool OnBeforeAchiComplete(Player* player, AchievementEntry const* achievement) override
     {
