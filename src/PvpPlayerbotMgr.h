@@ -10,7 +10,7 @@
 #include "Player.h"
 #include "PlayerbotAI.h"
 #include "PlayerbotAIBase.h"
-#include "Playerbots.h"
+#include "PlayerbotMgr.h"
 #include "QueryHolder.h"
 #include "QueryResult.h"
 
