@@ -431,7 +431,8 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
         return;
     }
 
-    sPvpPlayerbotsMgr->AddPvpPlayerbotData(bot, true);
+    //sPvpPlayerbotsMgr->AddPvpPlayerbotData(bot, true);
+    sPlayerbotsMgr->AddPlayerbotData(bot, true);
     playerBots[bot->GetGUID()] = bot;
     OnBotLoginInternal(bot);
 
