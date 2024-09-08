@@ -38,7 +38,7 @@ public:
             sPvpMgr->OnPlayerLogin(player);
             std::cout << "OnLogin Handled\n";
         }
-    }*/
+    }
 
     void OnAfterUpdate(Player* player, uint32 diff) override
     {
