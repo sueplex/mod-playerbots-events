@@ -44,9 +44,7 @@ public:
     {
         if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
         {
-            std::cout << "updating AI\n";
             botAI->UpdateAI(diff);
-            std::cout << "updated AI\n";
         }
 
         if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
