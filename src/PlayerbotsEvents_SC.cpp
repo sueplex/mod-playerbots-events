@@ -31,8 +31,10 @@ public:
 
     void OnLogin(Player* player) override
     {
-        sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
-        sPvpMgr->OnPlayerLogin(player);
+        if (sPvpMgr->IsPvpBot(player) {
+            sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
+            sPvpMgr->OnPlayerLogin(player);
+        }
     }
 
     void OnAfterUpdate(Player* player, uint32 diff) override
