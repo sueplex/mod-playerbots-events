@@ -431,8 +431,7 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
         return;
     }
 
-    //sPvpPlayerbotsMgr->AddPvpPlayerbotData(bot, true);
-    sPlayerbotsMgr->AddPlayerbotData(bot, true);
+    sPvpPlayerbotsMgr->AddPvpPlayerbotData(bot, true);
     playerBots[bot->GetGUID()] = bot;
     OnBotLoginInternal(bot);
 
@@ -771,17 +770,15 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
 
 void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
-    std::cout << "setting pvp bot data\n";
+    sPlayerbotsMgr->AddPlayerbotData(bot, true);
     if (!player)
     {
-        std::cout << "no player??\n";
         return;
     }
     // If the guid already exists in the map, remove it
 
     if (!isBotAI)
     {
-        std::cout << "Is not bot AI?\n";
         std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsMgrMap.find(player->GetGUID());
         if (itr != _playerbotsMgrMap.end())
         {
@@ -794,7 +791,6 @@ void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
     }
     else
     {
-        std::cout << "setting ai\n";
         std::unordered_map<ObjectGuid, PlayerbotAIBase*>::iterator itr = _playerbotsAIMap.find(player->GetGUID());
         if (itr != _playerbotsAIMap.end())
         {

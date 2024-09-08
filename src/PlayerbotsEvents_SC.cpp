@@ -29,7 +29,7 @@ class PlayerbotsEventsPlayer : public PlayerScript
 public:
     PlayerbotsEventsPlayer() : PlayerScript("PlayerbotsEventsPlayer") { }
 
-    /*void OnLogin(Player* player) override
+    void OnLogin(Player* player) override
     {
         if (!player->GetSession()->IsBot())
         {
@@ -53,14 +53,14 @@ public:
         }
     }
 
-    /*bool OnBeforeAchiComplete(Player* player, AchievementEntry const* achievement) override
+    bool OnBeforeAchiComplete(Player* player, AchievementEntry const* achievement) override
     {
         if (sPvpMgr->IsPvpBot(player))
         {
             return false;
         }
         return true;
-    }*/
+    }
 };
 
 
