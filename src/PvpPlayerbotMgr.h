@@ -9,6 +9,7 @@
 #include "Common.h"
 #include "Player.h"
 #include "PlayerbotAI.h"
+#include "PlayerbotMgr.h"
 #include "PlayerbotAIBase.h"
 #include "QueryHolder.h"
 #include "QueryResult.h"
