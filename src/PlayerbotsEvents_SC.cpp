@@ -44,7 +44,7 @@ public:
     {
         if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
         {
-            //botAI->UpdateAI(diff);
+            botAI->UpdateAI(diff);
         }
 
         if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
