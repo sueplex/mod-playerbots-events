@@ -31,13 +31,8 @@ public:
 
     void OnLogin(Player* player) override
     {
-        if (!player->GetSession()->IsBot())
-        {
-            std::cout << "Session IsBot false\n";
-            sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
-            sPvpMgr->OnPlayerLogin(player);
-            std::cout << "OnLogin Handled\n";
-        }
+        sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
+        sPvpMgr->OnPlayerLogin(player);
     }
 
     void OnAfterUpdate(Player* player, uint32 diff) override
