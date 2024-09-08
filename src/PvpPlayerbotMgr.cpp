@@ -955,20 +955,23 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
 
     if (!strcmp(cmd, "self"))
     {
+        std::cout << "Initing self\n";
         if (GET_PVPPLAYERBOT_AI(master))
         {
+            std::cout << "unsetting master?\n";
             messages.push_back("Disable player botAI");
             delete GET_PVPPLAYERBOT_AI(master);
         }
-        else if (sPlayerbotAIConfig->selfBotLevel == 0)
-            messages.push_back("Self-bot is disabled");
-        else if (sPlayerbotAIConfig->selfBotLevel == 1 && master->GetSession()->GetSecurity() < SEC_GAMEMASTER)
-            messages.push_back("You do not have permission to enable player botAI");
         else
         {
             messages.push_back("Enable player botAI");
+            std::cout<< "adding data\n";
             sPvpPlayerbotsMgr->AddPvpPlayerbotData(master, true);
+            std::cout<< "added data\n";
+
+            std::cout << "setting master\n";
             GET_PVPPLAYERBOT_AI(master)->SetMaster(master);
+            std::cout << "uset master";
         }
 
         return messages;
@@ -1479,11 +1482,11 @@ void PvpPlayerbotMgr::OnBotLoginInternal(Player* const bot)
 
 void PvpPlayerbotMgr::OnPlayerLogin(Player* player)
 {
+    std::cout << "pvppm OnPlayerLogin\n";
     // set locale priority for bot texts
     sPlayerbotTextMgr->AddLocalePriority(player->GetSession()->GetSessionDbcLocale());
 
-    if (sPlayerbotAIConfig->selfBotLevel > 2)
-        HandlePvpPlayerbotCommand("self", player);
+    HandlePvpPlayerbotCommand("self", player);
 
     if (!sPlayerbotAIConfig->botAutologin)
         return;

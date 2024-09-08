@@ -29,11 +29,44 @@ class PlayerbotsEventsPlayer : public PlayerScript
 public:
     PlayerbotsEventsPlayer() : PlayerScript("PlayerbotsEventsPlayer") { }
 
-    void OnUpdateZone(Player* player, uint32 newZone, uint32 newArea) override
+    void OnLogin(Player* player) override
     {
-        sPlayerbotsEvents->OnUpdateZone(player, newZone, newArea);
+        if (!player->GetSession()->IsBot())
+        {
+            std::cout << "Session IsBot false\n";
+            sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
+            sPvpMgr->OnPlayerLogin(player);
+            std::cout << "OnLogin Handled\n";
+        }
     }
+
+    void OnAfterUpdate(Player* player, uint32 diff) override
+    {
+        if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
+        {
+            std::cout << "updating AI\n";
+            botAI->UpdateAI(diff);
+            std::cout << "updated AI\n";
+        }
+
+        if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+        {
+            std::cout << "updating PVP AI\n";
+            playerbotMgr->UpdateAI(diff);
+            std::cout << "updated PVP AI\n";
+        }
+    }
+
+    /*bool OnBeforeAchiComplete(Player* player, AchievementEntry const* achievement) override
+    {
+        if (sPvpMgr->IsPvpBot(player))
+        {
+            return false;
+        }
+        return true;
+    }*/
 };
+
 
 // Add World scripts
 class PlayerbotsEventsWorld : public WorldScript
@@ -62,8 +95,11 @@ public:
     void OnPlayerbotUpdateSessions(Player* player) override
     {
         if (player)
-            if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+            if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player)) {
+                std::cout << "updating\n";
                 playerbotMgr->UpdateSessions();
+                std::cout << "updated\n";
+            }
     }
 
     void OnPlayerbotPacketSent(Player* player, WorldPacket const* packet) override
@@ -79,7 +115,6 @@ public:
         {
             playerbotMgr->HandleMasterOutgoingPacket(*packet);
         }
-
     }
 };
 

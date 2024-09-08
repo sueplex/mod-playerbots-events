@@ -810,7 +810,7 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
         }
 
         bot->GetMotionMaster()->Clear();
-        PlayerbotAI* botAI = GET_PLAYERBOT_AI(bot);
+        PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
         if (botAI)
             botAI->Reset(true);
         bot->TeleportTo(loc.GetMapId(), x, y, z, 0);
