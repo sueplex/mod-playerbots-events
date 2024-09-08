@@ -31,7 +31,7 @@ public:
 
     void OnLogin(Player* player) override
     {
-        if (sPvpMgr->IsPvpBot(player) {
+        if (sPvpMgr->IsPvpBot(player)) {
             sPvpPlayerbotsMgr->AddPvpPlayerbotData(player, false);
             sPvpMgr->OnPlayerLogin(player);
         }
