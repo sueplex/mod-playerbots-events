@@ -809,13 +809,17 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
             bot->SetHomebind(loc, zone->ID);
         }
 
+        std::cout << "I'm here\n";
         bot->GetMotionMaster()->Clear();
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
+        std::cout << "I'm here2\n";
         if (botAI)
             botAI->Reset(true);
+        std::cout << "I'm here3\n";
         bot->TeleportTo(loc.GetMapId(), x, y, z, 0);
         bot->SendMovementFlagUpdate();
 
+        std::cout << "I'm here4\n";
         return;
     }
 
