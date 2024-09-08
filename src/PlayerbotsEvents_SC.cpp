@@ -92,9 +92,7 @@ public:
     {
         if (player)
             if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player)) {
-                std::cout << "updating\n";
                 playerbotMgr->UpdateSessions();
-                std::cout << "updated\n";
             }
     }
 
