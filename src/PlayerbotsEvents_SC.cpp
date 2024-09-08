@@ -40,20 +40,20 @@ public:
         }
     }
 
-    /*void OnAfterUpdate(Player* player, uint32 diff) override
+    void OnAfterUpdate(Player* player, uint32 diff) override
     {
         if (PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(player))
         {
             botAI->UpdateAI(diff);
         }
 
-        if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
+        /*if (PvpPlayerbotMgr* playerbotMgr = GET_PVPPLAYERBOT_MGR(player))
         {
             std::cout << "updating PVP AI\n";
             playerbotMgr->UpdateAI(diff);
             std::cout << "updated PVP AI\n";
-        }
-    }*/
+        }*/
+    }
 
     /*bool OnBeforeAchiComplete(Player* player, AchievementEntry const* achievement) override
     {
