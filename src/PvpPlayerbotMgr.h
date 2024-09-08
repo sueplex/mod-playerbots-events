@@ -120,6 +120,6 @@ private:
 #define sPvpPlayerbotsMgr PvpPlayerbotsMgr::instance()
 #define GET_PVPPLAYERBOT_MGR(object) sPvpPlayerbotsMgr->GetPvpPlayerbotMgr(object)
 //#define GET_PVPPLAYERBOT_AI(object) sPvpPlayerbotsMgr->GetPvpPlayerbotAI(object)
-#define GET_PVPPLAYERBOT_AI(object) sPlayerbotsMgr->GetPvpPlayerbotAI(object)
+#define GET_PVPPLAYERBOT_AI(object) sPlayerbotsMgr->GetPlayerbotAI(object)
 
 #endif
