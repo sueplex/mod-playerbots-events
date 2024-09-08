@@ -770,7 +770,7 @@ std::string const PvpPlayerbotHolder::ProcessBotCommand(std::string const cmd, O
 
 void PvpPlayerbotsMgr::AddPvpPlayerbotData(Player* player, bool isBotAI)
 {
-    sPlayerbotsMgr->AddPlayerbotData(bot, true);
+    sPlayerbotsMgr->AddPlayerbotData(player, true);
     if (!player)
     {
         return;
