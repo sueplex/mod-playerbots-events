@@ -607,7 +607,7 @@ bool PvpBotMgr::ProcessBot(Player* player)
     // {
     // TODO handle telporting bots around
     uint32 teleport = GetEventValue(bot, "teleport");
-    if (!teleport)
+    if (teleport)
     {
         std::cout << "teleporting?\n";
         LOG_INFO("pvpbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());

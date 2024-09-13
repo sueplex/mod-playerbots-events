@@ -953,7 +953,6 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
 
     if (!strcmp(cmd, "self"))
     {
-        std::cout << "Initing self\n";
         /*if (GET_PVPPLAYERBOT_AI(master))
         {
             std::cout << "unsetting master?\n";
@@ -963,13 +962,9 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
         else
         {*/
         messages.push_back("Enable player botAI");
-        std::cout<< "adding data\n";
         sPvpPlayerbotsMgr->AddPvpPlayerbotData(master, true);
-        std::cout<< "added data\n";
 
-        std::cout << "setting master\n";
         GET_PVPPLAYERBOT_AI(master)->SetMaster(master);
-        std::cout << "set master";
         //}
 
         return messages;
