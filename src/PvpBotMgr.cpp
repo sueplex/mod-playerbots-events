@@ -21,6 +21,7 @@
 #include "ServerFacade.h"
 #include "SharedDefines.h"
 #include "Unit.h"
+#include "World.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -29,7 +30,8 @@
 #include <vector>
 
 PvpBotMgr::PvpBotMgr() : PvpPlayerbotHolder() {
-
+    WorldLocation loc(1, 1285.882f, -4340.367f, 33.098f, 0);
+    locsPerLevelCache[60].push_back(loc);
 }
 
 PvpBotMgr::~PvpBotMgr() {
