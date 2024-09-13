@@ -714,6 +714,7 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
 
     if (locs.empty())
     {
+        std::cout << "no locs\n";
         LOG_DEBUG("playerbots", "Cannot teleport bot {} - no locations available", bot->GetName().c_str());
         return;
     }
