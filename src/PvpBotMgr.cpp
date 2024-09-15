@@ -999,7 +999,7 @@ void PvpBotMgr::OnPlayerLogin(Player* player)
                 if (!bot->InBattleground())
                 {
                     botAI->SetMaster(player);
-                    botAI->ResetStrategies();
+                    botAI->ResetStrategies2();
                     botAI->TellMaster("Hello");
                 }
 
@@ -1144,7 +1144,7 @@ void PvpBotMgr::Refresh(Player* bot)
     {
         bot->ResurrectPlayer(1.0f);
         bot->SpawnCorpseBones();
-        botAI->ResetStrategies(false);
+        botAI->ResetStrategies2(false);
     }
 
     // if (sPlayerbotAIConfig->disableRandomLevels)

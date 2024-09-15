@@ -488,12 +488,12 @@ void PvpPlayerbotHolder::OnBotLogin(Player* const bot)
     group = bot->GetGroup();
     if (group)
     {
-        botAI->ResetStrategies();
+        botAI->ResetStrategies2();
     }
     else
     {
-        // botAI->ResetStrategies(!sRandomPlayerbotMgr->IsRandomBot(bot));
-        botAI->ResetStrategies();
+        // botAI->ResetStrategies2(!sRandomPlayerbotMgr->IsRandomBot(bot));
+        botAI->ResetStrategies2();
     }
 
     if (master && !master->HasUnitState(UNIT_STATE_IN_FLIGHT))
@@ -953,20 +953,10 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
 
     if (!strcmp(cmd, "self"))
     {
-        /*if (GET_PVPPLAYERBOT_AI(master))
-        {
-            std::cout << "unsetting master?\n";
-            messages.push_back("Disable player botAI");
-            delete GET_PVPPLAYERBOT_AI(master);
-        }
-        else
-        {*/
         messages.push_back("Enable player botAI");
         sPvpPlayerbotsMgr->AddPvpPlayerbotData(master, true);
 
         GET_PVPPLAYERBOT_AI(master)->SetMaster(master);
-        GET_PVPPLAYERBOT_AI(master)->ResetStrategies();
-        //}
 
         return messages;
     }
@@ -1469,7 +1459,7 @@ void PvpPlayerbotMgr::OnBotLoginInternal(Player* const bot)
         return;
     }
     //botAI->SetMaster(master);
-    botAI->ResetStrategies();
+    botAI->ResetStrategies2();
 
     LOG_INFO("playerbots", "Bot {} logged in", bot->GetName().c_str());
 }
