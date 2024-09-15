@@ -922,8 +922,11 @@ void PvpBotMgr::RandomizeFirst(Player* bot)
     PlayerbotsDatabase.Execute(stmt);
 
     // teleport to a random inn for bot level
-    if (GET_PVPPLAYERBOT_AI(bot))
+    if (GET_PVPPLAYERBOT_AI(bot)) {
         GET_PVPPLAYERBOT_AI(bot)->Reset(true);
+        GET_PVPPLAYERBOT_AI(bot)->ResetStrategies2();
+    }
+
 
     if (bot->GetGroup())
         bot->RemoveFromGroup();
