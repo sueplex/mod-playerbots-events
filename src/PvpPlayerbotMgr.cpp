@@ -965,6 +965,7 @@ std::vector<std::string> PvpPlayerbotHolder::HandlePvpPlayerbotCommand(char cons
         sPvpPlayerbotsMgr->AddPvpPlayerbotData(master, true);
 
         GET_PVPPLAYERBOT_AI(master)->SetMaster(master);
+        GET_PVPPLAYERBOT_AI(master)->ResetStrategies();
         //}
 
         return messages;
