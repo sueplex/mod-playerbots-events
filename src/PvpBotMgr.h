@@ -86,7 +86,7 @@ class PvpBotMgr : public PvpPlayerbotHolder
         std::list<uint32> currentBots;
 
         std::map<uint32, std::map<std::string, CachedPvpEvent>> eventCache;
-        std::map<uint8, std::vector<WorldLocation>> locsPerLevelCache;
+        std::map<uint8, std::vector<WorldLocation>> locsPerRaidCache;
 
 
 };

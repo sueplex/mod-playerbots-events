@@ -29,9 +29,36 @@
 #include <stdint.h>
 #include <vector>
 
+
+WorldLocation SW_Alli_1(1, -8816.233f, 650.658f, 94.549f, 1.36f);
+WorldLocation SW_Alli_2(1, -8813.371f, 650.422f, 94.542f, 2.14f);
+WorldLocation SW_Alli_3(1, -8834.425f, 636.413f, 94.474f, 5.73f);
+WorldLocation SW_Alli_4(1, -8814.245f, 616.836f, 94.839f, 2.21f);
+WorldLocation SW_Alli_5(1, -8853.779f, 617.489f, 95.987f, 0.13f);
+WorldLocation SW_Alli_6(1, -8843.036f, 650.025f, 96.693f, 3.43f);
+WorldLocation SW_Alli_7(1, -8856.855f, 649.924f 97.609f, 5.31f);
+WorldLocation SW_Alli_8(1, -8864.268f, 637.827f 95.945f, 0.09f);
+
+WorldLocation SW_Horde_1(-9104.613f, 290.815f, 93.601f, 1.871f);
+
+
+//WorldLocation ORG_Alli_1(1, 1285.882f, -4340.367f, 33.098f, 0);
+
 PvpBotMgr::PvpBotMgr() : PvpPlayerbotHolder() {
     WorldLocation loc(1, 1285.882f, -4340.367f, 33.098f, 0);
-    locsPerLevelCache[60].push_back(loc);
+
+    // Stormwind Alliance
+    locsPerRaidCache[1].push_back(SW_Alli_1);
+    locsPerRaidCache[1].push_back(SW_Alli_2);
+    locsPerRaidCache[1].push_back(SW_Alli_3);
+    locsPerRaidCache[1].push_back(SW_Alli_4);
+    locsPerRaidCache[1].push_back(SW_Alli_5);
+    locsPerRaidCache[1].push_back(SW_Alli_6);
+    locsPerRaidCache[1].push_back(SW_Alli_7);
+    locsPerRaidCache[1].push_back(SW_Alli_8);
+
+    // Stormwind Horde
+    locsPerRaidCache[3].push_back(SW_Horde_1);
 }
 
 PvpBotMgr::~PvpBotMgr() {
@@ -640,26 +667,17 @@ void PvpBotMgr::RandomTeleportForLevel(Player* bot)
     uint32 level = bot->GetLevel();
     uint8 race = bot->getRace();
     LOG_DEBUG("pvpbots", "Random teleporting bot {} for level {} ({} locations available)", bot->GetName().c_str(),
-              bot->GetLevel(), locsPerLevelCache[level].size());
+              bot->GetLevel(), locsPerRaidCache[level].size());
     /*
     if (level > 10 && urand(0, 100) < sPlayerbotAIConfig->probTeleToBankers * 100)
     {
         RandomTeleport(bot, bankerLocsPerLevelCache[level], true);
     }*/
-    RandomTeleport(bot, locsPerLevelCache[level]);
-}
-
-void PvpBotMgr::RandomTeleportGrindForLevel(Player* bot)
-{
-    if (bot->InBattleground())
-        return;
-
-    uint32 level = bot->GetLevel();
-    uint8 race = bot->getRace();
-    LOG_DEBUG("playerbots", "Random teleporting bot {} for level {} ({} locations available)", bot->GetName().c_str(),
-              bot->GetLevel(), locsPerLevelCache[level].size());
-
-    RandomTeleport(bot, locsPerLevelCache[level]);
+    if (player->GetTeamId() == TEAM_ALLIANCE) {
+        RandomTeleport(bot, locsPerRaidCache[1]);
+    } else {
+        RandomTeleport(bot, locsPerRaidCache[3]);
+    }
 }
 
 void PvpBotMgr::RandomTeleport(Player* bot)
@@ -1124,13 +1142,6 @@ void PvpBotMgr::Revive(Player* player)
     // LOG_INFO("playerbots", "Bot {} revived", player->GetName().c_str());
     SetEventValue(bot, "dead", 0, 0);
     SetEventValue(bot, "revive", 0, 0);
-
-
-    // TODO handle the revive here? what should they do
-    /*
-    Refresh(player);
-    RandomTeleportGrindForLevel(player);
-    */
 }
 
 void PvpBotMgr::Refresh(Player* bot)
