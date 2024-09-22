@@ -795,13 +795,6 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
         if (!area)
             continue;
 
-        // Do not teleport to enemy zones if level is low
-        if (zone->team == 4 && bot->GetTeamId() == TEAM_ALLIANCE)
-            continue;
-
-        if (zone->team == 2 && bot->GetTeamId() == TEAM_HORDE)
-            continue;
-
         if (map->IsInWater(bot->GetPhaseMask(), x, y, z, bot->GetCollisionHeight()))
             continue;
 
