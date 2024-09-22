@@ -73,9 +73,8 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 fraidStart = GetEventValue(0, "fraid");
     if (!fraidStart) {
         std::cout << "not valid: " << fraidStart << "\n";
+        std::cout << "resetting validity\n";
         SetEventValue(0, "fraid", 1, 300);
-    } else {
-        std::cout << "is valid: " << fraidStart << "\n";
     }
 
     GetBots();
