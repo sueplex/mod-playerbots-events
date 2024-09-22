@@ -510,7 +510,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         uint32 zoneId = player->GetZoneId();
         if (zoneId != 12) {
             std::cout << "teleporting for raid\n";
-            RandomTeleportForLevel(bot);
+            RandomTeleportForLevel(player);
         }
     }
 
