@@ -649,7 +649,8 @@ bool PvpBotMgr::ProcessBot(Player* player)
         std::cout << "teleporting?\n";
         LOG_INFO("pvpbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
         RandomTeleportForLevel(player);
-        uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
+        //uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
+        uint32 time = urand(60, 360);
         ScheduleTeleport(bot, time);
         return true;
     }
