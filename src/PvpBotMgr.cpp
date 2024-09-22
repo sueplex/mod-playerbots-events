@@ -673,7 +673,7 @@ void PvpBotMgr::RandomTeleportForLevel(Player* bot)
     {
         RandomTeleport(bot, bankerLocsPerLevelCache[level], true);
     }*/
-    if (player->GetTeamId() == TEAM_ALLIANCE) {
+    if (bot->GetTeamId() == TEAM_ALLIANCE) {
         RandomTeleport(bot, locsPerRaidCache[1]);
     } else {
         RandomTeleport(bot, locsPerRaidCache[3]);
