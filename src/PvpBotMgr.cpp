@@ -30,16 +30,16 @@
 #include <vector>
 
 
-WorldLocation SW_Alli_1(1, -8816.233f, 650.658f, 94.549f, 1.36f);
-WorldLocation SW_Alli_2(1, -8813.371f, 650.422f, 94.542f, 2.14f);
-WorldLocation SW_Alli_3(1, -8834.425f, 636.413f, 94.474f, 5.73f);
-WorldLocation SW_Alli_4(1, -8814.245f, 616.836f, 94.839f, 2.21f);
-WorldLocation SW_Alli_5(1, -8853.779f, 617.489f, 95.987f, 0.13f);
-WorldLocation SW_Alli_6(1, -8843.036f, 650.025f, 96.693f, 3.43f);
-WorldLocation SW_Alli_7(1, -8856.855f, 649.924f, 97.609f, 5.31f);
-WorldLocation SW_Alli_8(1, -8864.268f, 637.827f, 95.945f, 0.09f);
+WorldLocation SW_Alli_1(0, -8816.233f, 650.658f, 94.549f, 1.36f);
+WorldLocation SW_Alli_2(0, -8813.371f, 650.422f, 94.542f, 2.14f);
+WorldLocation SW_Alli_3(0, -8834.425f, 636.413f, 94.474f, 5.73f);
+WorldLocation SW_Alli_4(0, -8814.245f, 616.836f, 94.839f, 2.21f);
+WorldLocation SW_Alli_5(0, -8853.779f, 617.489f, 95.987f, 0.13f);
+WorldLocation SW_Alli_6(0, -8843.036f, 650.025f, 96.693f, 3.43f);
+WorldLocation SW_Alli_7(0, -8856.855f, 649.924f, 97.609f, 5.31f);
+WorldLocation SW_Alli_8(0, -8864.268f, 637.827f, 95.945f, 0.09f);
 
-WorldLocation SW_Horde_1(1, -9104.613f, 290.815f, 93.601f, 1.871f);
+WorldLocation SW_Horde_1(0, -9104.613f, 290.815f, 93.601f, 1.871f);
 
 
 //WorldLocation ORG_Alli_1(1, 1285.882f, -4340.367f, 33.098f, 0);
