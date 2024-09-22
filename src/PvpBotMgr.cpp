@@ -70,10 +70,10 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     // Get and Set Value for bot_count here?
     uint32 maxAllowedBotCount = 1;
 
+
     uint32 fraidStart = GetEventValue(0, "fraid");
     if (!fraidStart) {
-        std::cout << "not valid: " << fraidStart << "\n";
-        std::cout << "resetting validity\n";
+        std::cout << "setting validity for next raid\n";
         SetEventValue(0, "fraid", 1, 300);
     }
 
@@ -505,6 +505,14 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     }
 
     SetEventValue(bot, "login", 0, 0);
+
+    if (GetEventValue(0, "fraid")) {
+        uint32 zoneId = player->GetZoneId();
+        if (zoneId != 12) {
+            std::cout << "teleporting for raid\n";
+            RandomTeleportForLevel(bot);
+        }
+    }
 
     if (player->GetGroup() || player->HasUnitState(UNIT_STATE_IN_FLIGHT))
         return false;
