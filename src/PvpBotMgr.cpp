@@ -70,6 +70,14 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     // Get and Set Value for bot_count here?
     uint32 maxAllowedBotCount = 1;
 
+    uint32 fraidStart = GetEventValue(0, "fraid)
+    if (!fraidStart) {
+        std::cout << "not valid: " << fraidStart << "\n";
+        SetEventValue(0, "fraid", 1, 300);
+    } else {
+        std::cout << "is valid: " << fraidStart << "\n";
+    }
+
     GetBots();
     std::list<uint32> availableBots = currentBots;
 
