@@ -36,8 +36,8 @@ WorldLocation SW_Alli_3(1, -8834.425f, 636.413f, 94.474f, 5.73f);
 WorldLocation SW_Alli_4(1, -8814.245f, 616.836f, 94.839f, 2.21f);
 WorldLocation SW_Alli_5(1, -8853.779f, 617.489f, 95.987f, 0.13f);
 WorldLocation SW_Alli_6(1, -8843.036f, 650.025f, 96.693f, 3.43f);
-WorldLocation SW_Alli_7(1, -8856.855f, 649.924f 97.609f, 5.31f);
-WorldLocation SW_Alli_8(1, -8864.268f, 637.827f 95.945f, 0.09f);
+WorldLocation SW_Alli_7(1, -8856.855f, 649.924f, 97.609f, 5.31f);
+WorldLocation SW_Alli_8(1, -8864.268f, 637.827f, 95.945f, 0.09f);
 
 WorldLocation SW_Horde_1(-9104.613f, 290.815f, 93.601f, 1.871f);
 
