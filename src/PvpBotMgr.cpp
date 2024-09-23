@@ -532,6 +532,8 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             RandomTeleportForLevel(player);
             SetEventValue(bot, "fraid start", 1, 900);
         }
+    } else {
+        std::cout << "wtf?\n";
     }
 
     uint32 update = GetEventValue(bot, "update");
