@@ -75,7 +75,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 fraidStart = GetEventValue(0, "fraid start");
     if (!fraid && !fraidStart) {
         std::cout << "starting this raid\n";
-        SetEventValue(0, "fraid start ", 1, 900);
+        SetEventValue(0, "fraid start", 1, 900);
     }
 
     if (!fraid && fraidStart) {
