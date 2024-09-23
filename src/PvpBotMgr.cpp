@@ -528,7 +528,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         if (GET_PVPPLAYERBOT_AI(player)) {
             GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
         }
-        SetEventValue(bot, "fraid start", 0, 0);
+        SetEventValue(bot, "fraid start", 0, 1);
     }
 
     uint32 update = GetEventValue(bot, "update");
