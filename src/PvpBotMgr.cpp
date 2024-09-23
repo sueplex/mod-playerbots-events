@@ -72,12 +72,12 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 
 
     uint32 fraid = GetEventValue(0, "fraid");
-    if (!fraid) {
+    uint32 fraidStart = GetEventValue(0, "fraid start");
+    if (!fraid && !fraidStart) {
         std::cout << "starting this raid\n";
         SetEventValue(0, "fraid start ", 1, 900);
     }
 
-    uint32 fraidStart = GetEventValue(0, "fraid start");
     if (!fraid && fraidStart) {
         std::cout << "setting validity for next raid\n";
         SetEventValue(0, "fraid ", 1, 300);
@@ -522,7 +522,8 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
             RandomTeleportForLevel(player);
         }
         SetEventValue(bot, "fraid start", 1, 900);
-    } else if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
+    }
+    if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
         std::cout << "adding strategy\n";
         if (GET_PVPPLAYERBOT_AI(player)) {
             GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
