@@ -524,8 +524,8 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         SetEventValue(bot, "fraid start", 1, 900);
     } else if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
         std::cout << "adding strategy\n";
-        if (GET_PVPPLAYERBOT_AI(bot)) {
-            GET_PVPPLAYERBOT_AI(bot)->SetRaidStrategies();
+        if (GET_PVPPLAYERBOT_AI(player)) {
+            GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
         }
         SetEventValue(bot, "fraid start", 0, 0);
     }
