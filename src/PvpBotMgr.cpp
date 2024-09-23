@@ -279,7 +279,7 @@ void PvpBotMgr::CreatePvpBots()
 
 uint32 PvpBotMgr::AddPVPBots()
 {
-    uint32 maxAllowedBots = 1;
+    uint32 maxAllowedBots = 10;
     if (currentBots.size() < maxAllowedBots)
     {
 
