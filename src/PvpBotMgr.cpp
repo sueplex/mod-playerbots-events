@@ -515,20 +515,19 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     if (player->GetGroup() || player->HasUnitState(UNIT_STATE_IN_FLIGHT))
         return false;
 
-    if (GetEventValue(0, "fraid")) {
+    if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
+        std::cout << "adding strategy\n";
+        if (GET_PVPPLAYERBOT_AI(player)) {
+            GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
+        }
+        SetEventValue(bot, "fraid start", 0, 0);
+    } else if (GetEventValue(0, "fraid")) {
         uint32 zoneId = player->GetZoneId();
         if (zoneId != 12 && zoneId != 1519 && player->GetLevel() >= 60) {
             std::cout << "teleporting for raid\n";
             RandomTeleportForLevel(player);
         }
         SetEventValue(bot, "fraid start", 1, 900);
-    }
-    if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
-        std::cout << "adding strategy\n";
-        if (GET_PVPPLAYERBOT_AI(player)) {
-            GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
-        }
-        SetEventValue(bot, "fraid start", 0, 1);
     }
 
     uint32 update = GetEventValue(bot, "update");
