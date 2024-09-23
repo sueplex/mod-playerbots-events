@@ -78,7 +78,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     }
 
     uint32 fraidStart = GetEventValue(0, "fraid start");
-    if (!fraid && !fraidStart) {
+    if (!fraid && fraidStart) {
         std::cout << "setting validity for next raid\n";
         SetEventValue(0, "fraid ", 1, 300);
     }
