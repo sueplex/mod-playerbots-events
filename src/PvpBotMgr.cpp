@@ -518,22 +518,22 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     uint32 gFraidStart = GetEventValue(0, "fraid start");
     uint32 lFraidStart = GetEventValue(bot, "fraid start");
     uint32 gFraid = GetEventValue(0, "fraid");
+    uint32 stratAdded = GetEventValue(bot, "fraid strat");
 
     if (gFraidStart && lFraidStart) {
         std::cout << "adding strategy\n";
         if (GET_PVPPLAYERBOT_AI(player)) {
             GET_PVPPLAYERBOT_AI(player)->SetRaidStrategies();
+            SetEventValue(bot, "fraid strat", 1, 900);
         }
         SetEventValue(bot, "fraid start", 0, 0);
-    } else if (gFraid && !gFraidStart) {
+    } else if (gFraid) {
         uint32 zoneId = player->GetZoneId();
-        if (player->GetLevel() >= 60) {
+        if (!stratAdded && player->GetLevel() >= 60) {
             std::cout << "teleporting for raid\n";
             RandomTeleportForLevel(player);
             SetEventValue(bot, "fraid start", 1, 900);
         }
-    } else {
-        std::cout << "wtf?\n";
     }
 
     uint32 update = GetEventValue(bot, "update");
