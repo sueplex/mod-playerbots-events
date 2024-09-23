@@ -71,11 +71,18 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     uint32 maxAllowedBotCount = 10;
 
 
-    uint32 fraidStart = GetEventValue(0, "fraid");
-    if (!fraidStart) {
-        std::cout << "setting validity for next raid\n";
-        SetEventValue(0, "fraid", 1, 300);
+    uint32 fraid = GetEventValue(0, "fraid");
+    if (!fraid) {
+        std::cout << "starting this raid\n";
+        SetEventValue(0, "fraid start ", 1, 900);
     }
+
+    uint32 fraidStart = GetEventValue(0, "fraid start");
+    if (!fraid && !fraidStart) {
+        std::cout << "setting validity for next raid\n";
+        SetEventValue(0, "fraid ", 1, 300);
+    }
+
 
     GetBots();
     std::list<uint32> availableBots = currentBots;
@@ -491,14 +498,13 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         // do not randomize or teleport immediately after server start (prevent lagging)
         if (!GetEventValue(bot, "randomize")) {
             // TODO randomBotUpdateInterval
-            randomTime = urand(20 * 5, 20 * 20);
+            randomTime = urand(20 * 3, 20 * 9);
             ScheduleRandomize(bot, randomTime);
         }
 
         if (!GetEventValue(bot, "teleport")) {
             // TODO randomBotUpdateInterval
-            randomTime = urand(20 * 2, 20 * 10);
-            std::cout << "setting teleport: " << randomTime << "\n";
+            randomTime = urand(20 * 3, 20 * 9);
             ScheduleTeleport(bot, randomTime);
         }
         return true;
@@ -506,16 +512,23 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
 
     SetEventValue(bot, "login", 0, 0);
 
+    if (player->GetGroup() || player->HasUnitState(UNIT_STATE_IN_FLIGHT))
+        return false;
+
     if (GetEventValue(0, "fraid")) {
         uint32 zoneId = player->GetZoneId();
         if (zoneId != 12 && zoneId != 1519) {
             std::cout << "teleporting for raid\n";
             RandomTeleportForLevel(player);
         }
+        SetEventValue(bot, "fraid start", 1, 900);
+    } else if (GetEventValue(0, "fraid start") && GetEventValue(bot, "fraid start")) {
+        std::cout << "adding strategy\n";
+        if (GET_PVPPLAYERBOT_AI(bot)) {
+            GET_PVPPLAYERBOT_AI(bot)->SetRaidStrategies();
+        }
+        SetEventValue(bot, "fraid start", 0, 0);
     }
-
-    if (player->GetGroup() || player->HasUnitState(UNIT_STATE_IN_FLIGHT))
-        return false;
 
     uint32 update = GetEventValue(bot, "update");
     if (!update)
@@ -544,12 +557,10 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
 
         if (update) {
-            std::cout << "Updating Bot\n";
             ProcessBot(player);
         }
 
-        // TODO min / maxRandomBotReviveTime
-        uint32 randomTime = urand(60, 100);
+        uint32 randomTime = urand(60 * 30, 60 * 60);
         SetEventValue(bot, "update", 1, randomTime);
 
         return true;
@@ -635,9 +646,7 @@ bool PvpBotMgr::ProcessBot(Player* player)
     uint32 randomize = GetEventValue(bot, "randomize");
     if (!randomize)
     {
-        std::cout << "Randomizing\n";
         Randomize(player);
-        std::cout << "Refreshing from process\n";
         Refresh(player);
         LOG_INFO("playerbots", "Bot #{} {}:{} <{}>: randomized", bot, player->GetTeamId() == TEAM_ALLIANCE ? "A" : "H", player->GetLevel(), player->GetName());
         // TODO schedule new randomize?
@@ -650,17 +659,17 @@ bool PvpBotMgr::ProcessBot(Player* player)
     // if (!sPlayerbotAIConfig->autoDoQuests)
     // {
     // TODO handle telporting bots around
-    uint32 teleport = GetEventValue(bot, "teleport");
+    /*uint32 teleport = GetEventValue(bot, "teleport");
     if (teleport)
     {
         std::cout << "teleporting?\n";
         LOG_INFO("pvpbots", "Bot #{} <{}>: teleport for level and refresh", bot, player->GetName());
         RandomTeleportForLevel(player);
         //uint32 time = urand(sPlayerbotAIConfig->minRandomBotTeleportInterval, sPlayerbotAIConfig->maxRandomBotTeleportInterval);
-        uint32 time = urand(60, 360);
+        uint32 time = urand(60*20, 60*30);
         ScheduleTeleport(bot, time);
         return true;
-    }
+    }*/
     // }
 
     // uint32 changeStrategy = GetEventValue(bot, "change_strategy");
@@ -727,7 +736,6 @@ void PvpBotMgr::RandomTeleport(Player* bot)
     {
         RandomTeleportForLevel(bot);
     }
-    std::cout << "Refreshing from teleport\n";
     Refresh(bot);
 }
 
@@ -750,7 +758,6 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
 
     if (locs.empty())
     {
-        std::cout << "no locs\n";
         LOG_DEBUG("playerbots", "Cannot teleport bot {} - no locations available", bot->GetName().c_str());
         return;
     }
@@ -839,17 +846,13 @@ void PvpBotMgr::RandomTeleport(Player* bot, std::vector<WorldLocation>& locs, bo
             bot->SetHomebind(loc, zone->ID);
         }
 
-        std::cout << "I'm here\n";
         bot->GetMotionMaster()->Clear();
         PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
-        std::cout << "I'm here2\n";
         if (botAI)
             botAI->Reset(true);
-        std::cout << "I'm here3\n";
         bot->TeleportTo(loc.GetMapId(), x, y, z, 0);
         bot->SendMovementFlagUpdate();
 
-        std::cout << "I'm here4\n";
         return;
     }
 
@@ -1001,7 +1004,6 @@ void PvpBotMgr::RandomizeMin(Player* bot)
 
 void PvpBotMgr::OnPlayerLogin(Player* player)
 {
-    std::cout << "OnPlayerLogin\n";
     uint32 botsNearby = 0;
 
     for (PlayerBotMap::const_iterator it = GetPlayerBotsBegin(); it != GetPlayerBotsEnd(); ++it)
@@ -1155,13 +1157,10 @@ void PvpBotMgr::Revive(Player* player)
 
 void PvpBotMgr::Refresh(Player* bot)
 {
-    std::cout << "Refreshing " << bot->GetName() << "\n";
     PlayerbotAI* botAI = GET_PVPPLAYERBOT_AI(bot);
     if (!botAI) {
-        std::cout << "No botAI :(\n";
         return;
     }
-    std::cout << "Bot Active?: " << botAI->IsActive() << "\n";
 
     if (bot->isDead())
     {
