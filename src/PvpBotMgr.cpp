@@ -68,7 +68,7 @@ PvpBotMgr::~PvpBotMgr() {
 void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
 {
     // Get and Set Value for bot_count here?
-    uint32 maxAllowedBotCount = 1;
+    uint32 maxAllowedBotCount = 10;
 
 
     uint32 fraidStart = GetEventValue(0, "fraid");
@@ -90,7 +90,7 @@ void PvpBotMgr::UpdateAIInternal(uint32 elapsed, bool minimal)
     }
 
     // max Update 2?
-    uint32 updateBots = 1;
+    uint32 updateBots = 10;
     uint32 maxNewBots = onlineBotCount < maxAllowedBotCount ? maxAllowedBotCount - onlineBotCount : 0;
     uint32 loginBots = maxNewBots;
 
