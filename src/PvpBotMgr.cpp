@@ -486,6 +486,8 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     if (isLogginIn)
         return false;
 
+
+    bot->SetPvP(true);
     if (!player)
     {
         AddPlayerBot(botGUID, 0);
