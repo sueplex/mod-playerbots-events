@@ -541,9 +541,8 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
     uint32 update = GetEventValue(bot, "update");
     if (!update)
     {
-        if (GET_PVPPLAYERBOT_AI(bot)) {
-            GET_PVPPLAYERBOT_AI(bot)->Reset(true);
-            GET_PVPPLAYERBOT_AI(bot)->ResetStrategies2();
+        if (GET_PVPPLAYERBOT_AI(player)) {
+            GET_PVPPLAYERBOT_AI(player)->SetStrategies2();
         }
         if (botAI)
             // TODO pvp update?
