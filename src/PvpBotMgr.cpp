@@ -487,7 +487,6 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         return false;
 
 
-    player->SetPvP(true);
     if (!player)
     {
         AddPlayerBot(botGUID, 0);
@@ -538,6 +537,7 @@ bool PvpBotMgr::ProcessBot(uint32 bot)
         }
     }
 
+    player->SetPvP(true);
     uint32 update = GetEventValue(bot, "update");
     if (!update)
     {
